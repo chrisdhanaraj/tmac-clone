@@ -1,0 +1,13 @@
+ID,GooglePlaceID,BookingURL,Court_1_ID,Court_1_BookingStyle,Court_1_BookingDuration,Court_2_ID,Court_2_BookingStyle,Court_2_BookingDuration,Court_3_ID,Court_3_BookingStyle,Court_3_BookingDuration,Court_4_ID,Court_4_BookingStyle,Court_4_BookingDuration
+PotreroHill,ChIJzX3PObR_j4ARCM18KXQf8Qk,https://rec.us/potrerohill,Court1,SevenDaysBefore8AM,90,Court2,TwoDaysBeforeNoon,60,,,,,,
+Dolores,ChIJ_c7oyBl-j4ARczOfJmf4QzU,https://rec.us/dolores,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,90,Court3,TwoDaysBeforeNoon,60,,,
+Moscone,,https://rec.us/moscone,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,90,Court3,SevenDaysBefore8AM,90,Court4,TwoDaysBeforeNoon,60
+JP,ChIJHU0OWZ19j4ARiEIx8MXKcnk,https://rec.us/jpmurphy,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,90,Court3,TwoDaysBeforeNoon,90,,,
+StMarys,ChIJI97fh3F_j4AR1rq6W8FMKJ4,https://rec.us/stmarys,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,,,,,,,
+CrockerAmazon,ChIJw9z3HZd-j4ARN4Frc51rZUM,https://rec.us/crockeramazon,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,90,Court3,TwoDaysBeforeNoon,60,,,
+Hamilton,ChIJFZxNRQmBhYARfcz-62cayn4,https://rec.us/hamilton,Court1,SevenDaysBefore8AM,90,Court2,TwoDaysBeforeNoon,90,,,,,,
+MinnieLovie,ChIJp-lo9yV9j4ARj0wP0YCtAUA,http://rec.us/minnielovie,Court1,SevenDaysBefore8AM,90,Court2,TwoDaysBeforeNoon,90,,,,,,
+SternGrove,ChIJw7HzNQB9j4ARRlD7it0fIIM,https://www.rec.us/sterngrove,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,90,,,,,,
+Balboa,ChIJIf677YB-j4ARDXFDPl9Mpl0,https://www.rec.us/balboa,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,90,Court3,SevenDaysBefore8AM,90,Court4,TwoDaysBeforeNoon,60
+Lafayette,ChIJ5RUaAcGAhYAR5aav0rvmxuQ,https://www.rec.us/lafayette,Court1,SevenDaysBefore8AM,90,Court2,TwoDaysBeforeNoon,,,,,,,
+parkside,ChIJicG-0EN9j4ARAVZHR7y9XuA,https://www.rec.us/parkside,Court1,SevenDaysBefore8AM,90,Court2,SevenDaysBefore8AM,90,Court3,SevenDaysBefore8AM,90,Court4,TwoDaysBeforeNoon,60

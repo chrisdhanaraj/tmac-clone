@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../app/generated/prisma"
@@ -15,124 +12,246 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum booking_status {
+enum bookingStatus {
   draft
   ready
   complete
   cancelled
 }
 
-enum booking_style {
+enum bookingStyle {
   seven_days_before_8am
   two_days_before_noon
 }
 
-model booking {
-  id                 String         @id @default(uuid())
-  title              String
-  status             booking_status @default(draft)
-  date               DateTime
-  booking_time_start DateTime
-  booking_time_end   DateTime
-  event_time_start   DateTime
-  event_time_end     DateTime
-  court_group        String
-  luma_id            String?
-  host_id            String
-  host               user           @relation(fields: [host_id], references: [id])
-  court_id           String
-  court              court          @relation(fields: [court_id], references: [id])
+enum bookingType {
+  first_volleys
+  volley_and_vibes
+  vibras_and_voleas
+  feeder_session
+  tempo
+  starters
+  flow
 }
 
-model court_location {
-  id              String  @id @default(uuid())
-  name            String // e.g., "Potrero Hill"
-  google_place_id String? @map("google_place_id")
-  booking_url     String? @map("booking_url")
+enum Gender {
+  Woman
+  Man
+  NonBinary
+  Agender
+  PreferNotToState
+  Other
+}
 
-  courts court[]
+enum AgeRange {
+  EIGHTEEN_TO_TWENTY_FIVE
+  TWENTY_SIX_TO_THIRTY_FIVE
+  THIRTY_SIX_TO_FORTY_FIVE
+  FORTY_SIX_TO_FIFTY_FIVE
+  FIFTY_FIVE_PLUS
+  PreferNotToState
+}
+
+enum Ethnicity {
+  AmericanIndianOrAlaskaNative
+  PacificIslander
+  BlackOrAfricanAmerican
+  White
+  Arab
+  Asian
+  HispanicOrLatinx
+  MixedRace
+  Other
+}
+
+enum District {
+  District1
+  District2
+  District3
+  District4
+  District5
+  District6
+  District7
+  District8
+  District9
+  District10
+  District11
+  Other
+}
+
+enum TmacGearPreference {
+  Hat
+  Socks
+  Shirt
+  Other
+}
+
+enum GearSize {
+  XXS
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+  XXXL
+}
+
+enum TennisRanking {
+  ONE_ZERO
+  ONE_FIVE
+  TWO_ZERO
+  TWO_FIVE
+  THREE_ZERO
+  THREE_FIVE
+  FOUR_ZERO
+  FOUR_FIVE
+  FIVE_ZERO
+  FIVE_FIVE
+  SIX_ZERO
+  SIX_FIVE
+  SEVEN_ZERO
+}
+
+model booking {
+  id               String        @id @default(uuid())
+  title            String
+  type             bookingType
+  status           bookingStatus @default(draft)
+  date             DateTime
+  bookingTimeStart DateTime
+  bookingTimeEnd   DateTime
+  eventTimeStart   DateTime
+  eventTimeEnd     DateTime
+  lumaId           String?
+  hostId           String
+  host             user          @relation(fields: [hostId], references: [id])
+  courtLocationId  String
+  courtLocation    courtLocation @relation(fields: [courtLocationId], references: [id])
+  courts           court[]
+}
+
+model courtLocation {
+  id            String  @id @default(uuid())
+  name          String // e.g., "Potrero Hill"
+  googlePlaceId String?
+  bookingUrl    String?
+
+  courts   court[]
+  bookings booking[]
 }
 
 model court {
-  id               String         @id @default(uuid())
-  name             String
-  booking_style    booking_style
-  booking_duration Int            @map("booking_duration")
-  location_id      String         @map("location_id")
-  location         court_location @relation(fields: [location_id], references: [id])
-  bookings         booking[]
+  id              String        @id @default(uuid())
+  name            String
+  bookingStyle    bookingStyle
+  bookingDuration Int
+  locationId      String
+  location        courtLocation @relation(fields: [locationId], references: [id])
+  booking         booking?      @relation(fields: [bookingId], references: [id])
+  bookingId       String?
 }
 
 model user {
   id            String   @id @default(uuid())
   name          String
-  first_name    String
-  last_name     String
+  firstName     String
+  lastName      String
   email         String   @unique
   phone         String?
-  rec_user_id   String?
+  recUserId     String?
   emailVerified Boolean  @default(false)
   image         String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  roles    user_role[]
-  bookings booking[]
-  sessions session[]
-  accounts account[]
+  roles         userRole[]
+  bookings      booking[]
+  sessions      session[]
+  accounts      account[]
+  tennisProfile TennisProfile?
 }
 
 model role {
   id   String @id @default(uuid())
   name String @unique
 
-  users user_role[]
+  users userRole[]
 }
 
-model user_role {
-  user_id String @map("user_id")
-  role_id String @map("role_id")
+model userRole {
+  userId String
+  roleId String
 
-  user user @relation(fields: [user_id], references: [id])
-  role role @relation(fields: [role_id], references: [id])
+  user user @relation(fields: [userId], references: [id])
+  role role @relation(fields: [roleId], references: [id])
 
-  @@id([user_id, role_id])
+  @@id([userId, roleId])
 }
 
 model session {
-  id         String   @id @default(uuid())
-  expires_at DateTime @map("expires_at")
-  token      String   @unique
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @updatedAt @map("updated_at")
-  ip_address String?  @map("ip_address")
-  user_agent String?  @map("user_agent")
-  user_id    String   @map("user_id")
-  user       user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model account {
-  id                       String    @id @default(uuid())
-  account_id               String    @map("account_id")
-  provider_id              String    @map("provider_id")
-  user_id                  String    @map("user_id")
-  user                     user      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  access_token             String?   @map("access_token")
-  refresh_token            String?   @map("refresh_token")
-  id_token                 String?   @map("id_token")
-  access_token_expires_at  DateTime? @map("access_token_expires_at")
-  refresh_token_expires_at DateTime? @map("refresh_token_expires_at")
-  scope                    String?
-  password                 String?
-  created_at               DateTime  @default(now()) @map("created_at")
-  updated_at               DateTime  @updatedAt @map("updated_at")
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 }
 
 model verification {
-  id         String    @id @default(uuid())
+  id         String   @id @default(uuid())
   identifier String
   value      String
-  expires_at DateTime  @map("expires_at")
-  created_at DateTime? @default(now()) @map("created_at")
-  updated_at DateTime? @updatedAt @map("updated_at")
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model TennisProfile {
+  id     String  @id @default(uuid())
+  userId String? @unique
+  user   user?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Contact info - authoritative when userId is null, backup when userId is present
+  email String? // For guest profiles and matching
+  phone String? // For guest profiles and matching
+
+  gender               Gender?
+  ageRange             AgeRange?
+  ethnicity            Ethnicity?
+  birthDate            DateTime?
+  instagramHandle      String?             @db.VarChar(50)
+  district             District?
+  districtOther        String?             @db.VarChar(100)
+  tmacGearPreference   TmacGearPreference?
+  tmacGearOther        String?             @db.VarChar(100)
+  gearSize             GearSize?
+  playlistSong         String?             @db.VarChar(200)
+  whyJoinTmac          String?             @db.VarChar(500)
+  referredBy           String?             @db.VarChar(100)
+  tennisRanking        TennisRanking?
+  favoriteTennisPlayer String?             @db.VarChar(100)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  lastReminderAt       DateTime?
 }
