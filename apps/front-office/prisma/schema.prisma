@@ -166,6 +166,7 @@ model user {
   updatedAt     DateTime @updatedAt
 
   roles         userRole[]
+  tennisRoles   userTennisRoles[]
   bookings      booking[]
   sessions      session[]
   accounts      account[]
@@ -256,4 +257,25 @@ model TennisProfile {
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
   lastReminderAt       DateTime?
+}
+
+model tennisRoles {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users userTennisRoles[]
+}
+
+model userTennisRoles {
+  userId       String
+  tennisRoleId String
+
+  user       user        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tennisRole tennisRoles @relation(fields: [tennisRoleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, tennisRoleId])
 }

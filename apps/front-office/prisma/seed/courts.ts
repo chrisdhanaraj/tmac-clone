@@ -40,7 +40,9 @@ interface CourtRecord {
   Court_4_BookingDuration?: string;
 }
 
-async function main() {
+async function seedCourts() {
+  console.log("Seeding courts and locations...");
+  
   // Read and parse the CSV file
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
@@ -55,6 +57,17 @@ async function main() {
   for (const record of records) {
     // Use humanized name
     const locationName = humanizeLocationName(record.ID);
+    
+    // Check if location already exists
+    const existingLocation = await prisma.courtLocation.findFirst({
+      where: { name: locationName },
+    });
+
+    if (existingLocation) {
+      console.log(`Court location '${locationName}' already exists, skipping...`);
+      continue;
+    }
+
     // Create the court location
     const location = await prisma.courtLocation.create({
       data: {
@@ -63,6 +76,8 @@ async function main() {
         bookingUrl: record.BookingURL,
       },
     });
+
+    console.log(`✅ Created court location: ${locationName}`);
 
     // Helper function to create a court if it exists in the record
     const createCourt = async (courtNumber: number) => {
@@ -86,6 +101,8 @@ async function main() {
             locationId: location.id,
           },
         });
+
+        console.log(`✅ Created court: ${locationName} - Court ${courtNumber}`);
       }
     };
 
@@ -97,13 +114,24 @@ async function main() {
       createCourt(4),
     ]);
   }
+
+  console.log("Court seeding completed!");
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+async function main() {
+  await seedCourts();
+}
+
+// Only run directly if this file is executed directly
+if (typeof import.meta !== 'undefined' && import.meta.url === `file://${process.argv[1]}`) {
+  main()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}
+
+export { seedCourts };

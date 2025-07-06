@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "prisma": {
-    "seed": "node --import tsx prisma/seed/courts.ts"
+    "seed": "node --import tsx prisma/seed.ts"
   },
   "scripts": {
     "build": "react-router build",
@@ -14,6 +14,8 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:seed-tennis-roles": "node --import tsx prisma/seed/tennis-roles.ts",
     "db:import-roster": "node --import tsx prisma/seed/tennis-profiles.ts"
   },
   "dependencies": {
