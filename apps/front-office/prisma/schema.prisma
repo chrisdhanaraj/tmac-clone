@@ -249,7 +249,7 @@ model TennisProfile {
   tmacGearOther        String?             @db.VarChar(100)
   gearSize             GearSize?
   playlistSong         String?             @db.VarChar(200)
-  whyJoinTmac          String?             @db.VarChar(500)
+  whyJoinTmac          String?
   referredBy           String?             @db.VarChar(100)
   tennisRanking        TennisRanking?
   favoriteTennisPlayer String?             @db.VarChar(100)

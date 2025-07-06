@@ -13,7 +13,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "db:import-roster": "node --import tsx prisma/seed/tennis-profiles.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
