@@ -233,8 +233,10 @@ model TennisProfile {
   user   user?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Contact info - authoritative when userId is null, backup when userId is present
-  email String? // For guest profiles and matching
-  phone String? // For guest profiles and matching
+  firstName String? // For guest profiles and matching
+  lastName  String? // For guest profiles and matching
+  email     String? // For guest profiles and matching
+  phone     String? // For guest profiles and matching
 
   gender               Gender?
   ageRange             AgeRange?
