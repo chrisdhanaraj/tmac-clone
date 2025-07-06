@@ -15,6 +15,10 @@ async function initializeTennisClub() {
       },
     });
 
+    if (!org) {
+      throw new Error("Failed to create organization");
+    }
+
     console.log(`✅ Organization created: ${org.name} (ID: ${org.id})`);
 
     // Get all existing users and grant admin privileges (migration strategy)
@@ -39,11 +43,13 @@ async function initializeTennisClub() {
         await auth.api.addMember({
           body: {
             userId: user.id,
-            organizationId: org.id,
+            organizationId: org?.id,
             role: "admin", // Give all existing users admin privileges
           },
         });
-        console.log(`✅ Added ${user.firstName} ${user.lastName} (${user.email}) as admin`);
+        console.log(
+          `✅ Added ${user.firstName} ${user.lastName} (${user.email}) as admin`
+        );
         successCount++;
       } catch (error) {
         console.error(`❌ Failed to add user ${user.email}:`, error);
@@ -63,42 +69,49 @@ async function initializeTennisClub() {
       },
     });
 
-    console.log(`✅ Updated ${sessionUpdateResult.count} existing sessions with active organization`);
+    console.log(
+      `✅ Updated ${sessionUpdateResult.count} existing sessions with active organization`
+    );
 
-    console.log("\n🎉 The Mission Athletic Club organization initialization complete!");
+    console.log(
+      "\n🎉 The Mission Athletic Club organization initialization complete!"
+    );
     console.log(`   📍 Organization: ${org.name} (${org.slug})`);
     console.log(`   👥 Admin members: ${successCount}`);
     console.log(`   🔗 Active sessions updated: ${sessionUpdateResult.count}`);
-
   } catch (error) {
     console.error("❌ Failed to initialize organization:", error);
-    
+
     // Provide helpful error messages
     if (error instanceof Error) {
       console.error("Error details:", error.message);
-      
+
       if (error.message.includes("already exists")) {
         console.log("\n💡 It looks like the organization might already exist.");
-        console.log("   You can check existing organizations in your database.");
+        console.log(
+          "   You can check existing organizations in your database."
+        );
       } else if (error.message.includes("database")) {
         console.log("\n💡 Database connection issue detected.");
-        console.log("   Please ensure your DATABASE_URL is correctly set and the database is running.");
+        console.log(
+          "   Please ensure your DATABASE_URL is correctly set and the database is running."
+        );
       }
     }
-    
+
     process.exit(1);
   }
 }
 
 // Graceful shutdown handling
-process.on('SIGINT', async () => {
-  console.log('\n🛑 Received interrupt signal, cleaning up...');
+process.on("SIGINT", async () => {
+  console.log("\n🛑 Received interrupt signal, cleaning up...");
   await prisma.$disconnect();
   process.exit(0);
 });
 
-process.on('SIGTERM', async () => {
-  console.log('\n🛑 Received termination signal, cleaning up...');
+process.on("SIGTERM", async () => {
+  console.log("\n🛑 Received termination signal, cleaning up...");
   await prisma.$disconnect();
   process.exit(0);
 });
@@ -109,7 +122,10 @@ console.log("   Run with: node --import tsx scripts/init-organization.ts\n");
 
 initializeTennisClub()
   .catch((error) => {
-    console.error("💥 Unhandled error during organization initialization:", error);
+    console.error(
+      "💥 Unhandled error during organization initialization:",
+      error
+    );
     process.exit(1);
   })
   .finally(async () => {
