@@ -11,5 +11,6 @@ export default [
     route("events/:id/edit", "features/events/routes/events/edit-events.tsx"),
     route("courts", "features/courts/routes/courts.tsx"),
     route("profile", "features/profile/routes/profile/route.tsx"),
+    route("roster", "features/roster/routes/roster.tsx"),
   ]),
 ] satisfies RouteConfig;

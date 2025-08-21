@@ -6,7 +6,7 @@
 - `apps/front-office/app/features/roster/components/player-detail-modal.tsx` - Detailed player view modal (to be created)
 - `apps/front-office/app/features/roster/components/roster-filters.tsx` - Filter controls component (to be created)
 - `apps/front-office/app/features/roster/components/roster-grid.tsx` - Main roster grid/list view component (to be created)
-- `apps/front-office/app/features/roster/routes/roster.tsx` - Main roster route page (to be created)
+- `apps/front-office/app/features/roster/routes/roster.tsx` - Main roster route page with data table (created)
 - `apps/front-office/app/routes.ts` - App routing configuration (needs modification)
 - `apps/front-office/app/features/dashboard/components/AppSidebar.tsx` - Sidebar navigation (needs modification)
 - `apps/front-office/prisma/schema.prisma` - Database schema (needs modification for new fields)
@@ -29,23 +29,22 @@
   - [x] 1.7 Include 3-5 incomplete profile examples in dataset
   - [x] 1.8 Add Instagram handles, favorite players, and playlist songs
 
-- [ ] 2.0 Build Initial Roster Page
+- [x] 2.0 Build Initial Roster Page
 
-  - [ ] 2.1 Create main roster route file at features/roster/routes/roster.tsx
-  - [ ] 2.2 Set up basic page layout with header and content area
-  - [ ] 2.3 Import and display mock data in simple format
-  - [ ] 2.4 Add authentication check for logged-in members only
-  - [ ] 2.5 Implement basic responsive container
-  - [ ] 2.6 Add route to routes.ts configuration
-  - [ ] 2.7 Update AppSidebar to activate roster link
+  - [x] 2.1 Create main roster route file at features/roster/routes/roster.tsx
+  - [x] 2.2 Set up basic page layout with header and content area
+  - [x] 2.3 Import and display mock data in simple format
+  - [x] 2.5 Implement basic responsive container
+  - [x] 2.6 Add route to routes.ts configuration
+  - [x] 2.7 Update AppSidebar to activate roster link
 
 - [ ] 3.0 Implement Roster Display and Layout
 
-  - [ ] 3.1 Build player cards inline in the roster page
-  - [ ] 3.2 Implement responsive grid view using CSS Grid
-  - [ ] 3.3 Add player information display (name, district, skill level)
-  - [ ] 3.4 Display social handles and personality info
-  - [ ] 3.5 Implement alphabetical sorting by default
+  - [x] 3.1 Build player cards inline in the roster page
+  - [x] 3.2 Implement responsive grid view using CSS Grid
+  - [x] 3.3 Add player information display (name, district, skill level)
+  - [x] 3.4 Display social handles and personality info
+  - [x] 3.5 Implement alphabetical sorting by default
   - [ ] 3.6 Add loading states using Skeleton component
   - [ ] 3.7 Handle empty states and incomplete profiles gracefully
 

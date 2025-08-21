@@ -102,7 +102,7 @@ function generateEventTitle(
   hostId: string,
   type: string,
   date: Date,
-  users: any[]
+  users: Array<{ id: string; firstName: string; lastName: string }>
 ): string {
   const host = users.find((user) => user.id === hostId);
   const hostName = host ? host.firstName : "";

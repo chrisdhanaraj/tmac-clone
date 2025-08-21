@@ -10,7 +10,10 @@ import { EventForm } from "~/features/events/components/event-form";
 import * as z from "zod";
 import { useState, useEffect } from "react";
 import { useFetcher } from "react-router";
-import { createEventApiSchema } from "../../types/event-schemas";
+import {
+  createEventApiSchema,
+  type CreateEventFormData,
+} from "../../types/event-schemas";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -151,7 +154,7 @@ export default function CreateEventPage({ loaderData }: Route.ComponentProps) {
     }
   }, [fetcher.state, fetcher.data, navigate]);
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: CreateEventFormData) => {
     // Clear any previous submit state
     setSubmitState({
       status: "idle",

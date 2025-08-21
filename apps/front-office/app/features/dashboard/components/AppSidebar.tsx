@@ -11,27 +11,29 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "~/components/ui/sidebar";
-import {
-  Home,
-  Inbox,
-  Calendar,
-  Search,
-  Settings,
-  Users,
-  Tally4,
-  CalendarDays,
-} from "lucide-react";
+import { Home, Users, Tally4, CalendarDays } from "lucide-react";
 import { Link } from "react-router";
 import { NavUser } from "~/components/ui/sidebar/nav-user";
+import type { AuthUser } from "~/types/common";
 
-// Menu items.
-const items = [
+// General menu items - available to everyone
+const generalItems = [
   {
     title: "Home",
     url: "/dashboard",
     icon: Home,
   },
+  {
+    title: "Roster",
+    url: "/dashboard/roster",
+    icon: Users,
+  },
+];
+
+// Event Manager items
+const eventManagerItems = [
   {
     title: "Events",
     url: "/dashboard/events",
@@ -42,24 +44,10 @@ const items = [
     url: "/dashboard/courts",
     icon: Tally4,
   },
-  {
-    title: "Roster",
-    url: "#",
-    icon: Users,
-  },
 ];
 
-interface User {
-  id: string;
-  name: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  image?: string | null;
-}
-
 interface AppSidebarProps {
-  user: User;
+  user: AuthUser;
 }
 
 export function AppSidebar({ user }: AppSidebarProps) {
@@ -82,10 +70,10 @@ export function AppSidebar({ user }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+          <SidebarGroupLabel>General</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {generalItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link to={item.url}>
@@ -98,7 +86,24 @@ export function AppSidebar({ user }: AppSidebarProps) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup></SidebarGroup>
+        <SidebarSeparator />
+        <SidebarGroup>
+          <SidebarGroupLabel>Event Manager</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {eventManagerItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

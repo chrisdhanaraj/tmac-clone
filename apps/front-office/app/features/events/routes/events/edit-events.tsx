@@ -11,7 +11,10 @@ import { EventForm } from "~/features/events/components/event-form";
 import * as z from "zod";
 import { useState, useEffect } from "react";
 import { useFetcher } from "react-router";
-import { createEventApiSchema } from "~/features/events/types/event-schemas";
+import {
+  createEventApiSchema,
+  type CreateEventFormData,
+} from "~/features/events/types/event-schemas";
 
 export function meta({ params }: Route.MetaArgs) {
   return [
@@ -21,10 +24,7 @@ export function meta({ params }: Route.MetaArgs) {
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  console.log("params", params);
   const { id } = params;
-
-  console.log("id", id);
 
   if (!id) {
     throw new Response("Event ID is required", { status: 400 });
@@ -56,8 +56,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
     },
   });
 
-  console.log("booking", booking);
-
   if (!booking) {
     throw new Response("Event not found", { status: 404 });
   }
@@ -81,9 +79,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       },
     }),
   ]);
-
-  console.log("courtLocations", courtLocations);
-  console.log("users", users);
 
   return {
     booking,
@@ -237,7 +232,7 @@ export default function EditEventPage({ loaderData }: Route.ComponentProps) {
     }
   }, [fetcher.state, fetcher.data, navigate]);
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: CreateEventFormData) => {
     // Prevent submission if event is locked
     if (isEventLocked) {
       return;
@@ -376,7 +371,7 @@ export default function EditEventPage({ loaderData }: Route.ComponentProps) {
               eventTimeStart: booking.eventTimeStart.toISOString(),
               eventTimeEnd: booking.eventTimeEnd.toISOString(),
               courtLocationId: booking.courtLocationId,
-              courtIds: booking.courts.map((court: any) => court.id),
+              courtIds: booking.courts.map((court) => court.id),
               hostId: booking.hostId,
             }}
             courtLocations={courtLocations}

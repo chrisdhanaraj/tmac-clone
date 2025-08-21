@@ -3,19 +3,12 @@ import { data, Outlet, redirect } from "react-router";
 import { SidebarInset, SidebarProvider } from "~/components/ui/sidebar";
 import { useState, useEffect } from "react";
 import { AppSidebar } from "../components/AppSidebar";
-import { auth } from "~/features/auth/api/auth.server";
 import { tennisProfileService } from "~/features/profile/api/tennis-profile.server";
 import { ProfileCompletionModal } from "~/features/profile/components/profile-completion-modal";
+import { requireAuth } from "~/utils/auth";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  });
-
-  if (!session) {
-    // User is not authenticated, redirect to login
-    throw redirect("/");
-  }
+  const session = await requireAuth(request);
 
   // Check if user should see profile completion reminder
   const shouldShowReminder =
@@ -32,13 +25,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: Route.ActionArgs) {
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  });
-
-  if (!session) {
-    throw redirect("/");
-  }
+  const session = await requireAuth(request);
 
   try {
     const body = await request.json();

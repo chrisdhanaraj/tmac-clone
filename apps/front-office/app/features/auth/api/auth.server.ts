@@ -3,6 +3,7 @@ import prisma from "~/lib/prisma";
 import { betterAuth } from "better-auth";
 import { organization } from "better-auth/plugins";
 import { createAccessControl } from "better-auth/plugins/access";
+import { config } from "~/config/env";
 
 // Define access control statements for events, users, and roles resources
 const statement = {
@@ -33,7 +34,7 @@ const member = ac.newRole({
 });
 
 export const auth = betterAuth({
-  baseURL: "http://localhost:5173",
+  baseURL: config.auth.baseURL,
   emailAndPassword: {
     enabled: true,
   },

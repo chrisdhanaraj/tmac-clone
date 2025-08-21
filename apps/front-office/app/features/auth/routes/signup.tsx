@@ -67,11 +67,6 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      console.log("Attempting to sign up user:", {
-        email,
-        name: `${firstName} ${lastName}`,
-      });
-
       const response = await authClient.signUp.email({
         name: `${firstName} ${lastName}`,
         email,
@@ -81,8 +76,6 @@ export default function SignUp() {
         callbackURL: "/dashboard",
       });
 
-      console.log("Signup response:", response);
-
       // Check if signup was successful
       if (response.error) {
         throw new Error(response.error.message || "Failed to create account");
@@ -91,8 +84,6 @@ export default function SignUp() {
       // Show success message before redirecting
       setSuccess("Account created successfully! Redirecting to login...");
     } catch (err) {
-      console.error("Signup error:", err);
-
       // Handle specific error cases
       if (err instanceof Error) {
         if (
