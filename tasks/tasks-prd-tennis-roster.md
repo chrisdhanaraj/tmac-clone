@@ -46,7 +46,7 @@
   - [x] 3.4 Display social handles and personality info
   - [x] 3.5 Implement alphabetical sorting by default
   - [ ] 3.6 Add loading states using Skeleton component
-  - [ ] 3.7 Handle empty states and incomplete profiles gracefully
+  - [x] 3.7 Handle empty states and incomplete profiles gracefully
 
 - [ ] 4.0 Add Search and Filter Functionality
 
