@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
-import {
+import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-  VisibilityState,
+} from "@tanstack/react-table";
+import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -42,7 +43,8 @@ import {
 
 import { mockPlayers } from "../utils/mock-data";
 import type { Route } from "./+types/roster";
-import type { RosterPlayer } from "../types/roster";
+// import type { RosterPlayer } from "../types/roster";
+// import { TimePreference } from "../types/roster";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -56,12 +58,14 @@ export default function Roster() {
     { id: "firstName", desc: false },
   ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<
+    Record<string, boolean>
+  >({});
   const [rowSelection, setRowSelection] = useState({});
-  const [selectedPlayer, setSelectedPlayer] = useState<RosterPlayer | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
 
   // Define columns
-  const columns: ColumnDef<RosterPlayer>[] = useMemo(
+  const columns: ColumnDef<any>[] = useMemo(
     () => [
       {
         id: "firstName",
@@ -82,7 +86,9 @@ export default function Roster() {
                   {player.firstName} {player.lastName[0]}.
                 </div>
                 {!player.isProfileComplete && (
-                  <span className="text-xs text-amber-600">Incomplete profile</span>
+                  <span className="text-xs text-amber-600">
+                    Incomplete profile
+                  </span>
                 )}
               </div>
             </div>
@@ -100,7 +106,9 @@ export default function Roster() {
           return (
             <Button
               variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
               className="-ml-4"
             >
               District
@@ -123,7 +131,9 @@ export default function Roster() {
           return (
             <Button
               variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
               className="-ml-4"
             >
               Level
@@ -162,13 +172,18 @@ export default function Roster() {
         cell: ({ row }) => {
           const availability = row.original.availability;
           if (availability.length === 0) {
-            return <span className="text-muted-foreground text-sm">Not set</span>;
+            return (
+              <span className="text-muted-foreground text-sm">Not set</span>
+            );
           }
           return (
             <div className="text-sm">
               {availability.slice(0, 2).map((a, i) => (
                 <div key={i} className="text-muted-foreground">
-                  {a.day.slice(0, 3)} {a.timePreference === "AllDay" ? "All" : a.timePreference}
+                  {a.day.slice(0, 3)}{" "}
+                  {a.timePreference === TimePreference.AllDay
+                    ? "All"
+                    : a.timePreference}
                 </div>
               ))}
               {availability.length > 2 && (
@@ -260,7 +275,9 @@ export default function Roster() {
           <div className="flex items-center gap-4 pb-4">
             <Input
               placeholder="Search players..."
-              value={(table.getColumn("firstName")?.getFilterValue() as string) ?? ""}
+              value={
+                (table.getColumn("firstName")?.getFilterValue() as string) ?? ""
+              }
               onChange={(event) =>
                 table.getColumn("firstName")?.setFilterValue(event.target.value)
               }
@@ -356,9 +373,14 @@ export default function Roster() {
           {/* Pagination */}
           <div className="flex items-center justify-between space-x-2 py-4">
             <div className="text-sm text-muted-foreground">
-              Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{" "}
+              Showing{" "}
+              {table.getState().pagination.pageIndex *
+                table.getState().pagination.pageSize +
+                1}{" "}
+              to{" "}
               {Math.min(
-                (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+                (table.getState().pagination.pageIndex + 1) *
+                  table.getState().pagination.pageSize,
                 table.getFilteredRowModel().rows.length
               )}{" "}
               of {table.getFilteredRowModel().rows.length} players
@@ -386,7 +408,10 @@ export default function Roster() {
       </main>
 
       {/* Player Detail Modal */}
-      <Dialog open={!!selectedPlayer} onOpenChange={() => setSelectedPlayer(null)}>
+      <Dialog
+        open={!!selectedPlayer}
+        onOpenChange={() => setSelectedPlayer(null)}
+      >
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           {selectedPlayer && (
             <>
@@ -403,8 +428,8 @@ export default function Roster() {
                       {selectedPlayer.firstName} {selectedPlayer.lastName}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      District {selectedPlayer.district.replace("District", "")} • {" "}
-                      {selectedPlayer.tennisRanking.replace(/_/g, ".")}
+                      District {selectedPlayer.district.replace("District", "")}{" "}
+                      • {selectedPlayer.tennisRanking.replace(/_/g, ".")}
                     </p>
                   </div>
                 </DialogTitle>
@@ -416,7 +441,10 @@ export default function Roster() {
                   <div>
                     <h3 className="text-sm font-medium mb-2">Contact</h3>
                     <a
-                      href={`https://instagram.com/${selectedPlayer.instagramHandle.replace("@", "")}`}
+                      href={`https://instagram.com/${selectedPlayer.instagramHandle.replace(
+                        "@",
+                        ""
+                      )}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800"
@@ -462,7 +490,10 @@ export default function Roster() {
                     <div className="space-y-1">
                       {selectedPlayer.availability.map((a, i) => (
                         <div key={i} className="text-sm">
-                          {a.day} - {a.timePreference === "AllDay" ? "All Day" : a.timePreference}
+                          {a.day} -{" "}
+                          {a.timePreference === TimePreference.AllDay
+                            ? "All Day"
+                            : a.timePreference}
                         </div>
                       ))}
                     </div>
@@ -478,7 +509,9 @@ export default function Roster() {
                         <div key={role.id}>
                           <Badge className="mb-1">{role.name}</Badge>
                           {role.description && (
-                            <p className="text-xs text-muted-foreground">{role.description}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {role.description}
+                            </p>
                           )}
                         </div>
                       ))}
@@ -492,13 +525,17 @@ export default function Roster() {
                   <div className="space-y-2 text-sm">
                     {selectedPlayer.favoriteTennisPlayer && (
                       <div>
-                        <span className="text-muted-foreground">Favorite Player:</span>{" "}
+                        <span className="text-muted-foreground">
+                          Favorite Player:
+                        </span>{" "}
                         {selectedPlayer.favoriteTennisPlayer}
                       </div>
                     )}
                     {selectedPlayer.playlistSong && (
                       <div>
-                        <span className="text-muted-foreground">Playlist Song:</span>{" "}
+                        <span className="text-muted-foreground">
+                          Playlist Song:
+                        </span>{" "}
                         {selectedPlayer.playlistSong}
                       </div>
                     )}
@@ -506,21 +543,28 @@ export default function Roster() {
                 </div>
 
                 {/* Upcoming Events */}
-                {selectedPlayer.upcomingEvents && selectedPlayer.upcomingEvents.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium mb-2">Upcoming Events</h3>
-                    <div className="space-y-2">
-                      {selectedPlayer.upcomingEvents.map((event) => (
-                        <div key={event.id} className="text-sm p-3 bg-muted rounded-lg">
-                          <div className="font-medium">{event.title}</div>
-                          <div className="text-muted-foreground">
-                            {event.date.toLocaleDateString()} • {event.location}
+                {selectedPlayer.upcomingEvents &&
+                  selectedPlayer.upcomingEvents.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-medium mb-2">
+                        Upcoming Events
+                      </h3>
+                      <div className="space-y-2">
+                        {selectedPlayer.upcomingEvents.map((event) => (
+                          <div
+                            key={event.id}
+                            className="text-sm p-3 bg-muted rounded-lg"
+                          >
+                            <div className="font-medium">{event.title}</div>
+                            <div className="text-muted-foreground">
+                              {event.date.toLocaleDateString()} •{" "}
+                              {event.location}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             </>
           )}

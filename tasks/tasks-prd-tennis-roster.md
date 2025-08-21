@@ -55,18 +55,18 @@
   - [ ] 4.3 Add skill level filter with range or multi-select
   - [ ] 4.4 Create availability filter with day/time matrix
   - [ ] 4.5 Add playing style filter with multi-select
-  - [ ] 4.6 Implement name search with debounced input
+  - [x] 4.6 Implement name search with debounced input
   - [ ] 4.7 Add filter state management and combination logic
   - [ ] 4.8 Create mobile-friendly filter drawer/sheet
 
 - [ ] 5.0 Create Player Detail Views
 
-  - [ ] 5.1 Build player detail modal inline using Dialog component
-  - [ ] 5.2 Display all allowed profile fields with proper layout
-  - [ ] 5.3 Add Instagram handle as clickable external link
-  - [ ] 5.4 Create upcoming events section with event cards
-  - [ ] 5.5 Display all tennis roles with descriptions
-  - [ ] 5.6 Add playlist song and favorite player info
+  - [x] 5.1 Build player detail modal inline using Dialog component
+  - [x] 5.2 Display all allowed profile fields with proper layout
+  - [x] 5.3 Add Instagram handle as clickable external link
+  - [x] 5.4 Create upcoming events section with event cards
+  - [x] 5.5 Display all tennis roles with descriptions
+  - [x] 5.6 Add playlist song and favorite player info
   - [ ] 5.7 Implement modal navigation (previous/next player)
 
 - [ ] 6.0 Extract Reusable Components

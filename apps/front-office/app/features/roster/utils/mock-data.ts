@@ -1,7 +1,7 @@
 // Static mock dataset for the Tennis Roster feature
 
 import type { RosterPlayer } from "../types/roster";
-import { District, TennisRanking } from "~/generated/prisma";
+import { District, TennisRanking } from "~/generated/prisma/enums";
 import {
   DayOfWeek,
   TimePreference,

@@ -1,6 +1,10 @@
 // Type definitions for the Tennis Roster feature
 
-import type { District, TennisRanking } from "~/generated/prisma";
+// Import enums from generated Prisma types (safe for client-side)
+import type { District, TennisRanking } from "~/generated/prisma/enums";
+
+// Re-export for convenience
+export type { District, TennisRanking };
 
 // Day of week enum
 export enum DayOfWeek {
