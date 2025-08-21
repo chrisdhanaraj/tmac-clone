@@ -18,7 +18,7 @@
 
 ## Tasks
 
-- [ ] 1.0 Create Mock Data Infrastructure
+- [x] 1.0 Create Mock Data Infrastructure
 
   - [x] 1.1 Define TypeScript interfaces for roster data (Player, Availability, PlayingStyle, etc.)
   - [x] 1.2 Create static mock player dataset with ~30 realistic SF players
