@@ -28,12 +28,12 @@ export async function generateWelcomeMessage(request: Request) {
         ? profile.tennisRanking.replace("_", ".")
         : "Unknown";
       message =
-        `Welcome to Mission Athletic Club, ${user.name || "Player"}! 🎾\n\n` +
+        `Welcome to Mission Athletic Club, ${profile.firstName || "Player"}! 🎾\n\n` +
         `I see you're already in our system with a ${ranking} tennis ranking. ` +
         `Feel free to use the \`/match request\` command to find players to play with!`;
     } else if (user) {
       message =
-        `Welcome back, ${user.name || "Player"}! 🎾\n\n` +
+        `Welcome back, Player! 🎾\n\n` +
         `You're registered in our system but don't have a tennis profile yet. ` +
         `Please contact an administrator to complete your tennis profile setup.`;
     } else {

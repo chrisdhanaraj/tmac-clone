@@ -13,7 +13,7 @@ import {
   TmacGearPreference,
   GearSize,
   TennisRanking,
-} from "../../app/generated/prisma";
+} from "../../app/generated/prisma/client";
 import { parse } from "csv-parse/sync";
 import { readFileSync } from "fs";
 import { join, dirname } from "path";

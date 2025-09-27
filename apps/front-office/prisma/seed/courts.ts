@@ -1,4 +1,4 @@
-import { PrismaClient, bookingStyle } from "../../app/generated/prisma";
+import { PrismaClient, bookingStyle } from "../../app/generated/prisma/client";
 import { parse } from "csv-parse/sync";
 import { readFileSync } from "fs";
 import { join, dirname } from "path";
