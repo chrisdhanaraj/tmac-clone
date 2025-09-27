@@ -2,9 +2,6 @@
   "name": "front-office",
   "private": true,
   "type": "module",
-  "prisma": {
-    "seed": "node --import tsx prisma/seed.ts"
-  },
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
