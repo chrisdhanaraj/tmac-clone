@@ -70,10 +70,20 @@ export default [
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-non-null-assertion": "warn",
 
-      // React Refresh
+      // React Refresh - allow React Router exports
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+          allowExportNames: [
+            "loader",
+            "action",
+            "meta",
+            "headers",
+            "links",
+            "handle",
+          ],
+        },
       ],
 
       // General rules

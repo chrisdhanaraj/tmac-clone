@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: Magic Link Authentication API
+  description: API contracts for magic link login flow using BetterAuth
+  version: 1.0.0
+  
+servers:
+  - url: http://localhost:5173
+    description: Development server
+  - url: https://tmac.app
+    description: Production server
+
+paths:
+  /auth/magic-link/send:
+    post:
+      summary: Request magic link via email
+      description: Validates email and sends magic link for passwordless authentication
+      operationId: sendMagicLink
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MagicLinkRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MagicLinkRequest'
+      responses:
+        '200':
+          description: Magic link sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MagicLinkResponse'
+        '400':
+          description: Invalid email or validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Too many requests (rate limited)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error (email service failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/magic-link/verify:
+    get:
+      summary: Verify magic link token
+      description: Validates magic link token and creates authenticated session
+      operationId: verifyMagicLink
+      parameters:
+        - name: token
+          in: query
+          required: true
+          description: Magic link verification token
+          schema:
+            type: string
+            minLength: 32
+            maxLength: 512
+        - name: callbackURL
+          in: query
+          required: false
+          description: URL to redirect after successful verification
+          schema:
+            type: string
+            format: uri
+            default: "/user"
+      responses:
+        '302':
+          description: Successful verification, redirect to dashboard
+          headers:
+            Location:
+              description: Redirect URL (default /user)
+              schema:
+                type: string
+                format: uri
+            Set-Cookie:
+              description: Authentication session cookie
+              schema:
+                type: string
+        '302':
+          description: Failed verification, redirect to login with error
+          headers:
+            Location:
+              description: Login page with error parameter
+              schema:
+                type: string
+                example: "/login?error=expired"
+        '400':
+          description: Invalid token format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/session:
+    get:
+      summary: Get current user session
+      description: Returns authenticated user session data
+      operationId: getSession
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Current user session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    MagicLinkRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 5
+          maxLength: 254
+          example: "member@tennisclub.com"
+          description: User's email address for magic link delivery
+        callbackURL:
+          type: string
+          format: uri
+          example: "/user"
+          description: Optional redirect URL after successful login
+
+    MagicLinkResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Check your email for the login link"
+        email:
+          type: string
+          format: email
+          example: "member@tennisclub.com"
+          description: Email where magic link was sent (masked for privacy)
+
+    SessionResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        session:
+          $ref: '#/components/schemas/Session'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "clx1234567890abcdef"
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          example: "member@tennisclub.com"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        emailVerified:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2025-09-28T10:30:00Z"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-09-28T10:00:00Z"
+
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "sess_1234567890abcdef"
+        sessionToken:
+          type: string
+          example: "token_abcdef1234567890"
+        expires:
+          type: string
+          format: date-time
+          example: "2025-10-28T10:30:00Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid email address"
+          description: Human-readable error message
+        code:
+          type: string
+          example: "VALIDATION_ERROR"
+          description: Machine-readable error code
+        details:
+          type: object
+          additionalProperties: true
+          description: Additional error context
+
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: better-auth.session_token
+      description: BetterAuth session cookie
+
+security:
+  - sessionCookie: []
+
+tags:
+  - name: Authentication
+    description: Magic link authentication endpoints
+  - name: Session
+    description: User session management

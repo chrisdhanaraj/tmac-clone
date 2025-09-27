@@ -153,10 +153,10 @@ model court {
 }
 
 model user {
-  id            String   @id @default(uuid())
+  id            String            @id @default(uuid())
   recUserId     String?
-  discordId     String?  @unique
-  emailVerified Boolean  @default(false)
+  discordId     String?           @unique
+  emailVerified Boolean           @default(false)
   image         String?
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
@@ -165,9 +165,17 @@ model user {
   bookings      booking[]
   sessions      session[]
   accounts      account[]
-  tennisProfile TennisProfile?
+  tennisProfile tennisProfile?
   feeder        feeder?
   approved      Boolean           @default(false)
+
+  name        String?
+  email       String
+  firstName   String?
+  lastName    String?
+  members     member[]
+  phone       String?
+  invitations invitation[]
 }
 
 model role {
@@ -188,19 +196,22 @@ model userRole {
 }
 
 model session {
-  id        String   @id @default(uuid())
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                   String   @default(uuid())
+  expiresAt            DateTime
+  token                String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  ipAddress            String?
+  userAgent            String?
+  userId               String
+  user                 user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeOrganizationId String?
+
+  @@unique([token])
 }
 
 model account {
-  id                    String    @id @default(uuid())
+  id                    String    @id
   accountId             String
   providerId            String
   userId                String
@@ -217,12 +228,12 @@ model account {
 }
 
 model verification {
-  id         String   @id @default(uuid())
+  id         String   @id
   identifier String
   value      String
   expiresAt  DateTime
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime @default(now()) @updatedAt
 }
 
 model feeder {
@@ -236,14 +247,9 @@ model feeder {
   @@id([userId])
 }
 
-model TennisProfile {
+model tennisProfile {
   userId String @unique
   user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  firstName String?
-  lastName  String?
-  email     String
-  phone     String?
 
   gender               Gender?
   ageRange             AgeRange?
@@ -286,4 +292,39 @@ model userTennisRoles {
   tennisRole tennisRoles @relation(fields: [tennisRoleId], references: [id], onDelete: Cascade)
 
   @@id([userId, tennisRoleId])
+}
+
+model organization {
+  id          String       @id
+  name        String
+  slug        String?
+  logo        String?
+  createdAt   DateTime
+  metadata    String?
+  members     member[]
+  invitations invitation[]
+
+  @@unique([slug])
+}
+
+model member {
+  id             String       @id
+  organizationId String
+  organization   organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           user         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String
+  createdAt      DateTime
+}
+
+model invitation {
+  id             String       @id
+  organizationId String
+  organization   organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String
+  expiresAt      DateTime
+  inviterId      String
+  user           user         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
 }
