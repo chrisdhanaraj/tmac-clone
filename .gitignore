@@ -1,3 +1,28 @@
 /node_modules/
 .playwright-mcp
 scripts
+
+.DS_Store
+
+# React Router
+/.react-router/
+/build/
+
+# Environment variables
+.env
+.env.development
+.env.production
+generated
+data/*
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Luma script cache
+scripts/luma/luma-data-cache.json
+
+# AI
+.claude/settings.local.json
