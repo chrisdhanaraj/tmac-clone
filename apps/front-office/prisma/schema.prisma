@@ -124,8 +124,8 @@ model booking {
   eventTimeStart   DateTime
   eventTimeEnd     DateTime
   lumaId           String?
-  hostEmail        String
-  host             user          @relation(fields: [hostEmail], references: [email])
+  hostId           String
+  host             user          @relation(fields: [hostId], references: [id])
   courtLocationId  String
   courtLocation    courtLocation @relation(fields: [courtLocationId], references: [id])
   courts           court[]
@@ -153,18 +153,12 @@ model court {
 }
 
 model user {
-  id            String   @id @default(uuid())
-  name          String
-  firstName     String
-  lastName      String
-  email         String   @unique
-  phone         String?
+  id            String            @id @default(uuid())
   recUserId     String?
-  emailVerified Boolean  @default(false)
+  emailVerified Boolean           @default(false)
   image         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
   roles         userRole[]
   tennisRoles   userTennisRoles[]
   bookings      booking[]
@@ -172,6 +166,7 @@ model user {
   accounts      account[]
   tennisProfile TennisProfile?
   feeder        feeder?
+  approved      Boolean           @default(false)
 }
 
 model role {
@@ -241,15 +236,13 @@ model feeder {
 }
 
 model TennisProfile {
-  id     String  @id @default(uuid())
-  userId String? @unique
-  user   user?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Contact info - authoritative when userId is null, backup when userId is present
-  firstName String? // For guest profiles and matching
-  lastName  String? // For guest profiles and matching
-  email     String? // For guest profiles and matching
-  phone     String? // For guest profiles and matching
+  firstName String?
+  lastName  String?
+  email     String
+  phone     String?
 
   gender               Gender?
   ageRange             AgeRange?
@@ -257,18 +250,20 @@ model TennisProfile {
   birthDate            DateTime?
   instagramHandle      String?             @db.VarChar(50)
   district             District?
-  districtOther        String?             @db.VarChar(100)
+  districtOther        String?             @db.VarChar(10000)
   tmacGearPreference   TmacGearPreference?
-  tmacGearOther        String?             @db.VarChar(100)
+  tmacGearOther        String?             @db.VarChar(10000)
   gearSize             GearSize?
-  playlistSong         String?             @db.VarChar(200)
+  playlistSong         String?             @db.VarChar(10000)
   whyJoinTmac          String?
-  referredBy           String?             @db.VarChar(100)
+  referredBy           String?             @db.VarChar(10000)
   tennisRanking        TennisRanking?
-  favoriteTennisPlayer String?             @db.VarChar(100)
+  favoriteTennisPlayer String?             @db.VarChar(10000)
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
   lastReminderAt       DateTime?
+
+  @@id([userId])
 }
 
 model tennisRoles {
