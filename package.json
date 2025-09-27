@@ -9,8 +9,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@react-aria/datepicker": "^3.14.3",
-    "@react-stately/datepicker": "^3.14.1"
-  }
+  "dependencies": {}
 }
