@@ -2,27 +2,19 @@
  * Common types used across the application
  */
 
-// User type from better-auth with our custom fields
-export interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  image?: string | null;
-  emailVerified?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import type {
+  user as User,
+  session as Session,
+} from "~/generated/prisma/client";
 
-// Session type
+// User type from better-auth with our custom fields
+// Using Prisma's generated user type
+export type AuthUser = User;
+
+// Session type - combining Prisma's session with user
 export interface AuthSession {
   user: AuthUser;
-  session: {
-    id: string;
-    userId: string;
-    expiresAt: Date;
-  };
+  session: Session;
 }
 
 // Common async states

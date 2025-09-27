@@ -6,11 +6,11 @@ export default [
   route("signup", "features/auth/routes/signup.tsx"),
   route("dashboard", "features/dashboard/routes/dashboard.tsx", [
     index("features/dashboard/routes/home.tsx"),
-    route("events", "features/events/routes/events/events.tsx"),
-    route("events/create", "features/events/routes/events/create-events.tsx"),
-    route("events/:id/edit", "features/events/routes/events/edit-events.tsx"),
+    route("events", "features/events/routes/events.tsx"),
+    route("events/create", "features/events/routes/create-events.tsx"),
+    route("events/:id/edit", "features/events/routes/edit-events.tsx"),
     route("courts", "features/courts/routes/courts.tsx"),
-    route("profile", "features/profile/routes/profile/route.tsx"),
+    route("profile", "features/profile/routes/profile.tsx"),
     route("roster", "features/roster/routes/roster.tsx"),
   ]),
 ] satisfies RouteConfig;

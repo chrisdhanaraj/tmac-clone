@@ -124,8 +124,8 @@ model booking {
   eventTimeStart   DateTime
   eventTimeEnd     DateTime
   lumaId           String?
-  hostId           String
-  host             user          @relation(fields: [hostId], references: [id])
+  hostEmail        String
+  host             user          @relation(fields: [hostEmail], references: [email])
   courtLocationId  String
   courtLocation    courtLocation @relation(fields: [courtLocationId], references: [id])
   courts           court[]
@@ -171,6 +171,7 @@ model user {
   sessions      session[]
   accounts      account[]
   tennisProfile TennisProfile?
+  feeder        feeder?
 }
 
 model role {
@@ -226,6 +227,17 @@ model verification {
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model feeder {
+  userId     String    @unique
+  user       user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  count      Int       @default(0)
+  firstFedAt DateTime?
+  lastFedAt  DateTime?
+  notes      String?
+
+  @@id([userId])
 }
 
 model TennisProfile {

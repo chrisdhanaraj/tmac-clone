@@ -1,15 +1,19 @@
 import prisma from "~/lib/prisma";
-import type {
-  TennisProfile,
-  TennisProfileFormData,
-} from "~/features/profile/types/tennis-profile";
+import type { TennisProfile } from "~/generated/prisma/client";
+import type { TennisProfileFormData } from "~/features/profile/types/tennis-profile";
 
 export interface TennisProfileService {
   getTennisProfile(userId: string): Promise<TennisProfile | null>;
+  getTennisProfileByEmail(email: string): Promise<TennisProfile | null>;
   createTennisProfile(
     userId: string,
     data: TennisProfileFormData
   ): Promise<TennisProfile>;
+  createGuestTennisProfile(data: TennisProfileFormData): Promise<TennisProfile>;
+  linkGuestProfileToUser(
+    email: string,
+    userId: string
+  ): Promise<TennisProfile | null>;
   updateTennisProfile(
     userId: string,
     data: Partial<TennisProfileFormData>
@@ -40,6 +44,20 @@ export const tennisProfileService: TennisProfileService = {
     }
   },
 
+  async getTennisProfileByEmail(email: string): Promise<TennisProfile | null> {
+    try {
+      return await prisma.tennisProfile.findFirst({
+        where: {
+          email: email.toLowerCase(),
+          userId: null, // Only find guest profiles
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching tennis profile by email:", error);
+      throw new Error("Failed to fetch tennis profile by email");
+    }
+  },
+
   async createTennisProfile(
     userId: string,
     data: TennisProfileFormData
@@ -47,6 +65,12 @@ export const tennisProfileService: TennisProfileService = {
     try {
       const profileData = {
         userId,
+        // Contact info fields (backup when userId is present)
+        firstName: data.firstName || null,
+        lastName: data.lastName || null,
+        email: data.email ? data.email.toLowerCase() : null,
+        phone: data.phone || null,
+        // Tennis profile fields
         gender: data.gender || null,
         ageRange: data.ageRange || null,
         ethnicity: data.ethnicity || null,
@@ -73,6 +97,69 @@ export const tennisProfileService: TennisProfileService = {
     }
   },
 
+  async createGuestTennisProfile(
+    data: TennisProfileFormData
+  ): Promise<TennisProfile> {
+    try {
+      const profileData = {
+        userId: null, // No userId for guest profiles
+        // Contact info fields (authoritative when userId is null)
+        firstName: data.firstName || null,
+        lastName: data.lastName || null,
+        email: data.email ? data.email.toLowerCase() : null,
+        phone: data.phone || null,
+        // Tennis profile fields
+        gender: data.gender || null,
+        ageRange: data.ageRange || null,
+        ethnicity: data.ethnicity || null,
+        birthDate: data.birthDate ? new Date(data.birthDate) : null,
+        instagramHandle: data.instagramHandle || null,
+        district: data.district || null,
+        districtOther: data.districtOther || null,
+        tmacGearPreference: data.tmacGearPreference || null,
+        tmacGearOther: data.tmacGearOther || null,
+        gearSize: data.gearSize || null,
+        playlistSong: data.playlistSong || null,
+        whyJoinTmac: data.whyJoinTmac || null,
+        referredBy: data.referredBy || null,
+        tennisRanking: data.tennisRanking || null,
+        favoriteTennisPlayer: data.favoriteTennisPlayer || null,
+      };
+
+      return await prisma.tennisProfile.create({
+        data: profileData,
+      });
+    } catch (error) {
+      console.error("Error creating guest tennis profile:", error);
+      throw new Error("Failed to create guest tennis profile");
+    }
+  },
+
+  async linkGuestProfileToUser(
+    email: string,
+    userId: string
+  ): Promise<TennisProfile | null> {
+    try {
+      // Find the guest profile by email
+      const guestProfile = await this.getTennisProfileByEmail(email);
+
+      if (!guestProfile) {
+        return null; // No guest profile found
+      }
+
+      // Update the profile to link it to the user
+      const linkedProfile = await prisma.tennisProfile.update({
+        where: { id: guestProfile.id },
+        data: { userId },
+      });
+
+      return linkedProfile;
+    } catch (error) {
+      console.error("Error linking guest profile to user:", error);
+      throw new Error("Failed to link guest profile to user");
+    }
+  },
+
   async updateTennisProfile(
     userId: string,
     data: Partial<TennisProfileFormData>
@@ -81,6 +168,13 @@ export const tennisProfileService: TennisProfileService = {
       const updateData: any = {};
 
       // Only include fields that are defined in the update data
+      // Contact info fields
+      if (data.firstName !== undefined) updateData.firstName = data.firstName;
+      if (data.lastName !== undefined) updateData.lastName = data.lastName;
+      if (data.email !== undefined) updateData.email = data.email;
+      if (data.phone !== undefined) updateData.phone = data.phone;
+
+      // Tennis profile fields
       if (data.gender !== undefined) updateData.gender = data.gender;
       if (data.ageRange !== undefined) updateData.ageRange = data.ageRange;
       if (data.ethnicity !== undefined) updateData.ethnicity = data.ethnicity;

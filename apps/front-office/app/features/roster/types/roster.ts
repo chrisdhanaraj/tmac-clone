@@ -1,10 +1,8 @@
 // Type definitions for the Tennis Roster feature
 
-// Import enums from generated Prisma types (safe for client-side)
+// Import types from generated Prisma types (safe for client-side)
 import type { District, TennisRanking } from "~/generated/prisma/enums";
-
-// Re-export for convenience
-export type { District, TennisRanking };
+import type { tennisRoles as TennisRole } from "~/generated/prisma/client";
 
 // Day of week enum
 export enum DayOfWeek {
@@ -42,13 +40,6 @@ export enum MatchFormat {
 export interface Availability {
   day: DayOfWeek;
   timePreference: TimePreference;
-}
-
-// Tennis role interface
-export interface TennisRole {
-  id: string;
-  name: string;
-  description?: string;
 }
 
 // Upcoming event interface

@@ -15,18 +15,10 @@ import {
 } from "~/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { authClient } from "~/features/auth/api/auth-client";
-
-interface User {
-  id: string;
-  name: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  image?: string | null;
-}
+import type { AuthUser } from "~/types/common";
 
 interface NavUserProps {
-  user: User;
+  user: AuthUser;
 }
 
 export function NavUser({ user }: NavUserProps) {

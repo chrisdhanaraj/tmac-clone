@@ -1,53 +1,31 @@
 import * as z from "zod";
-
-// Shared constants for booking types and statuses
-export const BOOKING_TYPE = {
-  first_volleys: "first_volleys",
-  volley_and_vibes: "volley_and_vibes",
-  vibras_and_voleas: "vibras_and_voleas",
-  feeder_session: "feeder_session",
-  tempo: "tempo",
-  starters: "starters",
-  flow: "flow",
-} as const;
-
-export const BOOKING_STATUS = {
-  draft: "draft",
-  ready: "ready",
-  complete: "complete",
-  cancelled: "cancelled",
-} as const;
-
-// Type definitions derived from constants
-export type BookingType = (typeof BOOKING_TYPE)[keyof typeof BOOKING_TYPE];
-export type BookingStatus =
-  (typeof BOOKING_STATUS)[keyof typeof BOOKING_STATUS];
+import { bookingType, bookingStatus } from "~/generated/prisma/enums";
 
 // Shared booking type and status options for UI
 export const bookingTypeOptions = [
-  { value: BOOKING_TYPE.first_volleys, label: "First Volleys" },
-  { value: BOOKING_TYPE.volley_and_vibes, label: "Volley and Vibes" },
-  { value: BOOKING_TYPE.vibras_and_voleas, label: "Vibras and Voleas" },
-  { value: BOOKING_TYPE.feeder_session, label: "Feeder Session" },
-  { value: BOOKING_TYPE.tempo, label: "Tempo" },
-  { value: BOOKING_TYPE.starters, label: "Starters" },
-  { value: BOOKING_TYPE.flow, label: "Flow" },
+  { value: bookingType.first_volleys, label: "First Volleys" },
+  { value: bookingType.volley_and_vibes, label: "Volley and Vibes" },
+  { value: bookingType.vibras_and_voleas, label: "Vibras and Voleas" },
+  { value: bookingType.feeder_session, label: "Feeder Session" },
+  { value: bookingType.tempo, label: "Tempo" },
+  { value: bookingType.starters, label: "Starters" },
+  { value: bookingType.flow, label: "Flow" },
 ] as const;
 
 export const bookingStatusOptions = [
   {
-    value: BOOKING_STATUS.draft,
+    value: bookingStatus.draft,
     label: "Draft",
     variant: "secondary" as const,
   },
-  { value: BOOKING_STATUS.ready, label: "Ready", variant: "default" as const },
+  { value: bookingStatus.ready, label: "Ready", variant: "default" as const },
   {
-    value: BOOKING_STATUS.complete,
+    value: bookingStatus.complete,
     label: "Complete",
     variant: "outline" as const,
   },
   {
-    value: BOOKING_STATUS.cancelled,
+    value: bookingStatus.cancelled,
     label: "Cancelled",
     variant: "destructive" as const,
   },
@@ -56,21 +34,8 @@ export const bookingStatusOptions = [
 // Base schema with shared validation logic
 const baseEventSchema = z.object({
   title: z.string(),
-  type: z.enum([
-    BOOKING_TYPE.first_volleys,
-    BOOKING_TYPE.volley_and_vibes,
-    BOOKING_TYPE.vibras_and_voleas,
-    BOOKING_TYPE.feeder_session,
-    BOOKING_TYPE.tempo,
-    BOOKING_TYPE.starters,
-    BOOKING_TYPE.flow,
-  ]),
-  status: z.enum([
-    BOOKING_STATUS.draft,
-    BOOKING_STATUS.ready,
-    BOOKING_STATUS.complete,
-    BOOKING_STATUS.cancelled,
-  ]),
+  type: z.nativeEnum(bookingType),
+  status: z.nativeEnum(bookingStatus),
   bookingTimeStart: z
     .string()
     .refine((val) => !val || !isNaN(Date.parse(val)), "Invalid time"),

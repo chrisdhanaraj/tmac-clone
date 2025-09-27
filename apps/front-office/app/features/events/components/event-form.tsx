@@ -34,14 +34,17 @@ import {
   parseAbsolute,
 } from "@internationalized/date";
 import { Badge } from "~/components/ui/badge";
+import { bookingType, bookingStatus } from "~/generated/prisma/enums";
 import {
-  BOOKING_TYPE,
-  BOOKING_STATUS,
   bookingTypeOptions,
   bookingStatusOptions,
   createEventFormSchema,
   type CreateEventFormData,
 } from "~/features/events/types/event-schemas";
+
+// Use the enums directly
+const BOOKING_TYPE = bookingType;
+const BOOKING_STATUS = bookingStatus;
 
 type FormValues = CreateEventFormData;
 

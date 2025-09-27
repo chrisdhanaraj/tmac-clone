@@ -43,8 +43,43 @@ import {
 
 import { mockPlayers } from "../utils/mock-data";
 import type { Route } from "./+types/roster";
-// import type { RosterPlayer } from "../types/roster";
-// import { TimePreference } from "../types/roster";
+import type { RosterPlayer } from "../types/roster";
+import { TimePreference } from "../types/roster";
+
+// Helper function to format tennis ranking
+const formatTennisRanking = (ranking: string): string => {
+  return ranking
+    .replace(/_/g, ".")
+    .replace("ONE", "1")
+    .replace("TWO", "2")
+    .replace("THREE", "3")
+    .replace("FOUR", "4")
+    .replace("FIVE", "5")
+    .replace("SIX", "6")
+    .replace("SEVEN", "7")
+    .replace(".ZERO", ".0")
+    .replace(".FIVE", ".5");
+};
+
+// Helper function to format district with neighborhood names
+const formatDistrict = (district: string): string => {
+  const districtMap: Record<string, string> = {
+    District1: "D1 (Richmond)",
+    District2: "D2 (Marina/Cow Hollow)",
+    District3: "D3 (Chinatown/North Beach)",
+    District4: "D4 (Sunset)",
+    District5: "D5 (Haight/Western Addition)",
+    District6: "D6 (SOMA/Mission Bay)",
+    District7: "D7 (Mission/Potrero)",
+    District8: "D8 (Castro/Noe Valley)",
+    District9: "D9 (Mission/Bernal Heights)",
+    District10: "D10 (Bayview/Visitacion Valley)",
+    District11: "D11 (Excelsior/Ingleside)",
+    Other: "Other",
+  };
+
+  return districtMap[district] || district;
+};
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -118,11 +153,7 @@ export default function Roster() {
         },
         cell: ({ row }) => {
           const district = row.original.district;
-          return (
-            <div className="font-medium">
-              {district.replace("District", "")}
-            </div>
-          );
+          return <div className="font-medium">{formatDistrict(district)}</div>;
         },
       },
       {
@@ -145,7 +176,7 @@ export default function Roster() {
           const ranking = row.original.tennisRanking;
           return (
             <Badge variant="secondary" className="font-mono">
-              {ranking.replace(/_/g, ".")}
+              {formatTennisRanking(ranking)}
             </Badge>
           );
         },
@@ -428,8 +459,8 @@ export default function Roster() {
                       {selectedPlayer.firstName} {selectedPlayer.lastName}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      District {selectedPlayer.district.replace("District", "")}{" "}
-                      • {selectedPlayer.tennisRanking.replace(/_/g, ".")}
+                      {formatDistrict(selectedPlayer.district)} •{" "}
+                      {formatTennisRanking(selectedPlayer.tennisRanking)}
                     </p>
                   </div>
                 </DialogTitle>

@@ -7,10 +7,28 @@ import {
   TmacGearPreference,
   GearSize,
   TennisRanking,
-} from "~/features/profile/types/tennis-profile";
+} from "~/generated/prisma/enums";
 
 // Validation schema for tennis profile form
 export const tennisProfileSchema = z.object({
+  // Contact info fields for guest profiles
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(50, "First name must be 50 characters or less")
+    .optional(),
+  lastName: z
+    .string()
+    .min(1, "Last name is required")
+    .max(50, "Last name must be 50 characters or less")
+    .optional(),
+  email: z.string().email("Please enter a valid email address").optional(),
+  phone: z
+    .string()
+    .regex(/^\+?[\d\s\-\(\)]+$/, "Please enter a valid phone number")
+    .optional(),
+
+  // Tennis profile fields
   gender: z.nativeEnum(Gender).optional(),
   ageRange: z.nativeEnum(AgeRange).optional(),
   ethnicity: z.nativeEnum(Ethnicity).optional(),
@@ -77,7 +95,23 @@ export const tennisProfileSchema = z.object({
 // Validation schema for partial updates (auto-save)
 export const tennisProfilePartialSchema = tennisProfileSchema.partial();
 
+// Validation schema for guest profile creation (requires contact info)
+export const guestTennisProfileSchema = tennisProfileSchema.extend({
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(50, "First name must be 50 characters or less"),
+  lastName: z
+    .string()
+    .min(1, "Last name is required")
+    .max(50, "Last name must be 50 characters or less"),
+  email: z.string().email("Please enter a valid email address"),
+});
+
 export type TennisProfileSchemaType = z.infer<typeof tennisProfileSchema>;
+export type GuestTennisProfileSchemaType = z.infer<
+  typeof guestTennisProfileSchema
+>;
 
 // Helper function to validate individual fields
 export function validateField(

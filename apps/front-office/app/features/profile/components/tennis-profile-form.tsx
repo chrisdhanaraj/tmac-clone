@@ -27,10 +27,9 @@ import {
   tennisProfileSchema,
   type TennisProfileSchemaType,
 } from "~/features/profile/utils/tennis-profile";
+import { District, TmacGearPreference } from "~/generated/prisma/enums";
+import type { TennisProfile } from "~/generated/prisma/client";
 import {
-  District,
-  TmacGearPreference,
-  type TennisProfile,
   GenderLabels,
   AgeRangeLabels,
   EthnicityLabels,

@@ -13,7 +13,7 @@ import { useFetcher } from "react-router";
 import {
   createEventApiSchema,
   type CreateEventFormData,
-} from "../../types/event-schemas";
+} from "../types/event-schemas";
 
 export function meta({}: Route.MetaArgs) {
   return [

@@ -1,5 +1,5 @@
-import { auth } from "../app/features/auth/api/auth.server";
-import prisma from "../app/lib/prisma";
+import { auth } from "../../app/features/auth/api/auth.server";
+import prisma from "../../app/lib/prisma";
 
 async function initializeTennisClub() {
   try {

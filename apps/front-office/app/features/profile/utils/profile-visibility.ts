@@ -1,7 +1,5 @@
-import type {
-  TennisProfile,
-  TennisProfileFormData,
-} from "~/features/profile/types/tennis-profile";
+import type { TennisProfile } from "~/generated/prisma/client";
+import type { TennisProfileFormData } from "~/features/profile/types/tennis-profile";
 
 // Define which fields are considered PII (Personally Identifiable Information)
 export const PII_FIELDS: (keyof TennisProfileFormData)[] = [
