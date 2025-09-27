@@ -1,7 +1,6 @@
-import type { Route } from "@react-router/dev/routes";
 import { generateWelcomeMessage } from '../welcome.js';
 
-export function action({ request }: Route.ActionArgs) {
+export function action({ request }: { request: Request }) {
   return generateWelcomeMessage(request);
 }
 

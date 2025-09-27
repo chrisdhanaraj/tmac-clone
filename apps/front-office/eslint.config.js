@@ -5,9 +5,25 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import prettierConfig from 'eslint-config-prettier';
+import globals from 'globals';
 
 export default [
   js.configs.recommended,
+  {
+    ignores: [
+      'node_modules/**',
+      '.react-router/**',
+      'build/**',
+      'dist/**',
+      'app/generated/**',
+      'coverage/**',
+      'prisma/migrations/**',
+      'prisma/seed/**',
+      'scripts/**',
+      '*.config.js',
+      '*.config.ts',
+    ],
+  },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
@@ -20,8 +36,11 @@ export default [
         },
       },
       globals: {
-        React: 'readonly',
-        JSX: 'readonly',
+        ...globals.browser, // window, document, fetch, etc.
+        ...globals.node, // process, Buffer, global, etc.
+        ...globals.es2021, // Promise, Set, Map, etc.
+        React: 'readonly', // React global for JSX
+        JSX: 'readonly', // JSX namespace
       },
     },
     plugins: {
@@ -42,17 +61,23 @@ export default [
       'react/jsx-uses-vars': 'error',
 
       // TypeScript rules
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'warn',
 
       // React Refresh
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
 
       // General rules
-      'no-console': 'warn',
+      'no-console': 'off', // Allow console in full-stack app
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
@@ -62,19 +87,6 @@ export default [
         version: 'detect',
       },
     },
-  },
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    ignores: [
-      'node_modules/**',
-      '.react-router/**',
-      'build/**',
-      'dist/**',
-      'app/generated/**',
-      'coverage/**',
-      '*.config.js',
-      '*.config.ts',
-    ],
   },
   prettierConfig, // Must be last to override conflicting rules
 ];

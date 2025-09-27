@@ -19,7 +19,8 @@ export type MatchRequest = {
 export async function createMatchRequest(request: Request) {
   try {
     const body = await request.json();
-    const { discordUserId, location, channelId } = MatchRequestSchema.parse(body);
+    const { discordUserId, location, channelId } =
+      MatchRequestSchema.parse(body);
 
     // Try to find user by Discord ID
     const user = await prisma.user.findFirst({

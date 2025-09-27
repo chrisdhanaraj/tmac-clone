@@ -20,11 +20,13 @@
     "zod": "^3.25.42"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@eslint/js": "^9.36.0",
+    "@types/node": "^20.17.47",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
     "prettier": "^3.6.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"

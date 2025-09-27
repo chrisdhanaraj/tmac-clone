@@ -1,9 +1,9 @@
-import Eris from 'eris';
+import { Client, Constants, CommandInteraction } from 'eris';
 import { config } from './config.js';
 import { handleWelcomeMessage } from './commands/welcome.js';
 import { handleMatchRequest } from './commands/match.js';
 
-const bot = new Eris(config.DISCORD_TOKEN);
+const bot = new Client(config.DISCORD_TOKEN);
 
 bot.on('ready', () => {
   console.log('Discord bot is ready!');
@@ -16,7 +16,7 @@ bot.on('ready', () => {
         {
           name: 'target',
           description: 'The user to welcome',
-          type: 6, // USER
+          type: Constants.ApplicationCommandOptionTypes.USER,
           required: true,
         },
       ],
@@ -28,12 +28,12 @@ bot.on('ready', () => {
         {
           name: 'request',
           description: 'Request a match at a specific location',
-          type: 1, // SUB_COMMAND
+          type: Constants.ApplicationCommandOptionTypes.SUB_COMMAND,
           options: [
             {
               name: 'location',
               description: 'Where you want to play',
-              type: 3, // STRING
+              type: Constants.ApplicationCommandOptionTypes.STRING,
               required: true,
             },
           ],
@@ -44,54 +44,70 @@ bot.on('ready', () => {
 
   // Register slash commands
   commands.forEach(command => {
-    bot.createGuildCommand(config.GUILD_ID, command)
+    bot
+      .createGuildCommand(config.GUILD_ID, {
+        name: command.name,
+        description: command.description,
+        type: Constants.ApplicationCommandTypes.CHAT_INPUT,
+        options: command.options as any, // Eris typing is complex, use targeted any for options
+      })
       .then(() => console.log(`Registered command: ${command.name}`))
       .catch(console.error);
   });
 });
 
-bot.on('interactionCreate', async (interaction) => {
-  console.log('Received interaction:', {
-    type: interaction.type,
-    commandName: interaction.data?.name,
-    options: interaction.data?.options
-  });
+bot.on('interactionCreate', async interaction => {
+  if (interaction.type === Constants.InteractionTypes.APPLICATION_COMMAND) {
+    const cmdInteraction = interaction as CommandInteraction;
 
-  if (interaction.type === 2) { // APPLICATION_COMMAND
-    const commandName = interaction.data.name;
-    const options = interaction.data.options;
+    console.log('Received interaction:', {
+      type: cmdInteraction.type,
+      commandName: cmdInteraction.data?.name,
+      options: cmdInteraction.data?.options,
+    });
+
+    const commandName = cmdInteraction.data.name;
+    const options = cmdInteraction.data.options;
 
     try {
       console.log(`Processing command: ${commandName}`);
 
       if (commandName === 'internal_welcome_message') {
-        await handleWelcomeMessage(interaction);
+        await handleWelcomeMessage(cmdInteraction);
       } else if (commandName === 'match' && options?.[0]?.name === 'request') {
-        await handleMatchRequest(interaction);
+        await handleMatchRequest(cmdInteraction);
       } else {
         console.log('Unknown command or subcommand:', commandName, options);
       }
     } catch (error) {
       console.error('Error handling interaction:', error);
 
-      const errorResponse = {
-        type: 4,
-        data: {
-          content: 'Sorry, something went wrong processing your command.',
-          flags: 64, // EPHEMERAL
-        },
-      };
+      const errorMessage =
+        'Sorry, something went wrong processing your command.';
 
-      if (interaction.acknowledged) {
-        bot.editOriginalMessage(interaction.token, errorResponse.data);
+      if (cmdInteraction.acknowledged) {
+        await cmdInteraction.editOriginalMessage({
+          content: errorMessage,
+        });
       } else {
-        bot.createInteractionResponse(interaction.id, interaction.token, errorResponse);
+        await bot.createInteractionResponse(
+          cmdInteraction.id,
+          cmdInteraction.token,
+          {
+            type: Constants.InteractionResponseTypes
+              .CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: errorMessage,
+              flags: Constants.MessageFlags.EPHEMERAL,
+            },
+          }
+        );
       }
     }
   }
 });
 
-bot.on('error', (err) => {
+bot.on('error', (err: Error) => {
   console.error('Discord bot error:', err);
 });
 

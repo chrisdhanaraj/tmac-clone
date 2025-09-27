@@ -11,6 +11,7 @@ Discord bot for Mission Athletic Club tennis community management.
 ## Setup
 
 1. Install dependencies:
+
    ```bash
    pnpm install
    ```
@@ -28,9 +29,11 @@ Discord bot for Mission Athletic Club tennis community management.
 ## Commands
 
 ### `/internal_welcome_message target:@user`
+
 Generates a personalized welcome message for a Discord user based on their membership status in the database.
 
 ### `/match request location:"Court 1"`
+
 Creates a match request that other players can respond to. Posts the request to the channel where the command was used.
 
 ## Development

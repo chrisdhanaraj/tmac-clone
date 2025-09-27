@@ -1,7 +1,6 @@
-import type { Route } from "@react-router/dev/routes";
 import { createMatchRequest } from '../match-request.js';
 
-export function action({ request }: Route.ActionArgs) {
+export function action({ request }: { request: Request }) {
   return createMatchRequest(request);
 }
 

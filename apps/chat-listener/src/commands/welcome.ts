@@ -1,9 +1,17 @@
 import type Eris from 'eris';
+import { Constants } from 'eris';
 import { config } from '../config.js';
 
-export async function handleWelcomeMessage(interaction: Eris.CommandInteraction) {
+export async function handleWelcomeMessage(
+  interaction: Eris.CommandInteraction
+) {
   console.log('handleWelcomeMessage called');
-  const targetUser = interaction.data.options?.[0]?.value as string;
+  // Get the target user ID from the command options
+  const targetUserOption = interaction.data.options?.[0];
+  const targetUser =
+    targetUserOption?.type === Constants.ApplicationCommandOptionTypes.USER
+      ? targetUserOption.value
+      : undefined;
   console.log('Target user:', targetUser);
 
   // Acknowledge the interaction immediately

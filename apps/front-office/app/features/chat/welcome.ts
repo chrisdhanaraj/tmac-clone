@@ -24,16 +24,21 @@ export async function generateWelcomeMessage(request: Request) {
 
     if (user && user.tennisProfile) {
       const profile = user.tennisProfile;
-      const ranking = profile.tennisRanking ? profile.tennisRanking.replace('_', '.') : 'Unknown';
-      message = `Welcome to Mission Athletic Club, ${user.name || 'Player'}! 🎾\n\n` +
+      const ranking = profile.tennisRanking
+        ? profile.tennisRanking.replace('_', '.')
+        : 'Unknown';
+      message =
+        `Welcome to Mission Athletic Club, ${user.name || 'Player'}! 🎾\n\n` +
         `I see you're already in our system with a ${ranking} tennis ranking. ` +
         `Feel free to use the \`/match request\` command to find players to play with!`;
     } else if (user) {
-      message = `Welcome back, ${user.name || 'Player'}! 🎾\n\n` +
+      message =
+        `Welcome back, ${user.name || 'Player'}! 🎾\n\n` +
         `You're registered in our system but don't have a tennis profile yet. ` +
         `Please contact an administrator to complete your tennis profile setup.`;
     } else {
-      message = `Welcome to Mission Athletic Club! 🎾\n\n` +
+      message =
+        `Welcome to Mission Athletic Club! 🎾\n\n` +
         `I don't see you in our member system yet. Please contact an administrator to get set up with your tennis profile and member access.`;
     }
 

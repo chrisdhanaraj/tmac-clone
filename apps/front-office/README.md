@@ -90,15 +90,18 @@ Your application will be available at `http://localhost:5173`.
 ## API Endpoints
 
 ### Chat Integration
+
 - `POST /api/chat/welcome` - Generate welcome messages for Discord users
 - `POST /api/chat/match-request` - Create tennis match requests
 
 ### Authentication
+
 - `/api/auth/*` - Better Auth endpoints for login/signup
 
 ## Database Schema
 
 Key models:
+
 - `user` - Club members with optional Discord integration
 - `TennisProfile` - Player skill levels and tennis-specific data
 - `booking` - Court reservations
