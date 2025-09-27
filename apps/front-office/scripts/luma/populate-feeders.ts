@@ -18,15 +18,15 @@
  * Note: Backfill mode requires events to already exist (use with --use-cache or after a full run)
  */
 
-import 'dotenv/config';
+import "dotenv/config";
 
 console.log(process.env);
 
-import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { writeFileSync, readFileSync, existsSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
-const { PrismaClient } = await import('../../app/generated/prisma');
+const { PrismaClient } = await import("../../app/generated/prisma");
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = dirname(__filename);
@@ -34,11 +34,11 @@ const __dirname = dirname(__filename);
 const prisma = new PrismaClient();
 // Configuration
 const LUMA_API_KEY = process.env.LUMA_API_KEY;
-const LUMA_API_BASE = 'https://public-api.luma.com';
-const DRY_RUN = process.argv.includes('--dry-run');
-const USE_CACHE = process.argv.includes('--use-cache');
-const CACHE_ONLY = process.argv.includes('--cache-only');
-const CACHE_FILE = join(__dirname, 'luma-data-cache.json');
+const LUMA_API_BASE = "https://public-api.luma.com";
+const DRY_RUN = process.argv.includes("--dry-run");
+const USE_CACHE = process.argv.includes("--use-cache");
+const CACHE_ONLY = process.argv.includes("--cache-only");
+const CACHE_FILE = join(__dirname, "luma-data-cache.json");
 
 // Check for backfill event IDs
 const BACKFILL_EVENT_IDS = getBackfillEventIds();
@@ -80,10 +80,10 @@ interface LumaGuestEntry {
  * Get backfill event IDs from command line arguments
  */
 function getBackfillEventIds(): string[] {
-  const backfillArg = process.argv.find(arg => arg.startsWith('--backfill='));
+  const backfillArg = process.argv.find(arg => arg.startsWith("--backfill="));
   if (!backfillArg) return [];
 
-  const idsString = backfillArg.split('=')[1];
+  const idsString = backfillArg.split("=")[1];
   if (!idsString) return [];
 
   // Support both comma-separated and JSON array format
@@ -93,7 +93,7 @@ function getBackfillEventIds(): string[] {
   } catch {
     // Fall back to comma-separated
     return idsString
-      .split(',')
+      .split(",")
       .map(id => id.trim())
       .filter(Boolean);
   }
@@ -123,8 +123,8 @@ interface CacheData {
  * Fetch all events from the Luma calendar (handles pagination)
  */
 async function fetchAllEvents(): Promise<LumaEventEntry[]> {
-  console.log('📅 Fetching all events from Luma calendar...');
-  console.log('🔑 Using API Key:', LUMA_API_KEY.substring(0, 10) + '...');
+  console.log("📅 Fetching all events from Luma calendar...");
+  console.log("🔑 Using API Key:", LUMA_API_KEY.substring(0, 10) + "...");
 
   const allEvents: LumaEventEntry[] = [];
   let cursor: string | null = null;
@@ -135,10 +135,10 @@ async function fetchAllEvents(): Promise<LumaEventEntry[]> {
       pageCount++;
       const url = new URL(`${LUMA_API_BASE}/v1/calendar/list-events`);
 
-      url.searchParams.append('pagination_limit', '2000');
+      url.searchParams.append("pagination_limit", "2000");
 
       if (cursor) {
-        url.searchParams.append('pagination_cursor', cursor);
+        url.searchParams.append("pagination_cursor", cursor);
       }
 
       console.log(url.toString());
@@ -146,16 +146,16 @@ async function fetchAllEvents(): Promise<LumaEventEntry[]> {
       console.log(`📡 Fetching page ${pageCount}...`);
 
       const response = await fetch(url.toString(), {
-        method: 'GET',
+        method: "GET",
         headers: {
-          accept: 'application/json',
-          'x-luma-api-key': LUMA_API_KEY,
+          accept: "application/json",
+          "x-luma-api-key": LUMA_API_KEY,
         },
       });
 
       if (!response.ok) {
         const text = await response.text();
-        console.log('Response body:', text);
+        console.log("Response body:", text);
         throw new Error(
           `Failed to fetch events: ${response.status} ${response.statusText}`
         );
@@ -182,7 +182,7 @@ async function fetchAllEvents(): Promise<LumaEventEntry[]> {
 
     return allEvents;
   } catch (error) {
-    console.error('❌ Error fetching events:', error);
+    console.error("❌ Error fetching events:", error);
     throw error;
   }
 }
@@ -210,16 +210,16 @@ async function fetchEventGuests(eventId: string): Promise<LumaGuestEntry[]> {
       const url = new URL(
         `${LUMA_API_BASE}/v1/event/get-guests?approval_status=approved`
       );
-      url.searchParams.append('event_api_id', eventId);
+      url.searchParams.append("event_api_id", eventId);
 
       if (cursor) {
-        url.searchParams.append('pagination_cursor', cursor);
+        url.searchParams.append("pagination_cursor", cursor);
       }
 
       const response = await fetch(url.toString(), {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'x-luma-api-key': LUMA_API_KEY,
+          "x-luma-api-key": LUMA_API_KEY,
         },
       });
 
@@ -264,14 +264,14 @@ function isFeeder(guestEntry: LumaGuestEntry): boolean {
 
     // Check for contributor questions
     if (
-      questionLower.includes('contributor') ||
-      questionLower.includes('contributing')
+      questionLower.includes("contributor") ||
+      questionLower.includes("contributing")
     ) {
       // Handle both single answer and multi-select
-      if (typeof answer.answer === 'string') {
-        if (answer.answer === 'Feeder') return true;
+      if (typeof answer.answer === "string") {
+        if (answer.answer === "Feeder") return true;
       } else if (Array.isArray(answer.answer)) {
-        if (answer.answer.includes('Feeder')) return true;
+        if (answer.answer.includes("Feeder")) return true;
       }
     }
   }
@@ -358,7 +358,7 @@ async function processFeeders(
     if (!email) {
       console.log(
         `   ⚠️  Feeder without email: ${
-          feeder.name || feeder.user_name || 'Unknown'
+          feeder.name || feeder.user_name || "Unknown"
         }`
       );
       continue;
@@ -392,12 +392,12 @@ async function processFeeders(
  */
 function loadFromCache(): CacheData | null {
   if (!existsSync(CACHE_FILE)) {
-    console.log('❌ Cache file not found:', CACHE_FILE);
+    console.log("❌ Cache file not found:", CACHE_FILE);
     return null;
   }
 
   try {
-    const cacheContent = readFileSync(CACHE_FILE, 'utf-8');
+    const cacheContent = readFileSync(CACHE_FILE, "utf-8");
     const cache = JSON.parse(cacheContent) as CacheData;
     console.log(`✅ Loaded cache from ${cache.fetchedAt}`);
     console.log(`   Events: ${cache.events.length}`);
@@ -406,7 +406,7 @@ function loadFromCache(): CacheData | null {
     );
     return cache;
   } catch (error) {
-    console.error('❌ Error loading cache:', error);
+    console.error("❌ Error loading cache:", error);
     return null;
   }
 }
@@ -428,7 +428,7 @@ function saveToCache(
     writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2));
     console.log(`\n💾 Saved API data to cache: ${CACHE_FILE}`);
   } catch (error) {
-    console.error('❌ Error saving cache:', error);
+    console.error("❌ Error saving cache:", error);
   }
 }
 
@@ -436,26 +436,26 @@ function saveToCache(
  * Main function to populate feeder data
  */
 async function populateFeeders() {
-  console.log('🚀 Starting feeder population script...');
+  console.log("🚀 Starting feeder population script...");
 
   // Show operation mode
   if (BACKFILL_EVENT_IDS.length > 0) {
     console.log(
       `🔄 Running in BACKFILL mode - fetching guest data for ${BACKFILL_EVENT_IDS.length} specific events\n`
     );
-    console.log('Event IDs to backfill guests for:', BACKFILL_EVENT_IDS);
+    console.log("Event IDs to backfill guests for:", BACKFILL_EVENT_IDS);
   }
   if (CACHE_ONLY) {
     console.log(
-      '💾 Running in CACHE ONLY mode - will fetch data and save to cache only\n'
+      "💾 Running in CACHE ONLY mode - will fetch data and save to cache only\n"
     );
   } else if (DRY_RUN) {
     console.log(
-      '🔍 Running in DRY RUN mode - no database changes will be made\n'
+      "🔍 Running in DRY RUN mode - no database changes will be made\n"
     );
   }
   if (USE_CACHE && BACKFILL_EVENT_IDS.length === 0) {
-    console.log('📂 Using cached data instead of API calls\n');
+    console.log("📂 Using cached data instead of API calls\n");
   }
 
   try {
@@ -467,7 +467,7 @@ async function populateFeeders() {
       const cache = loadFromCache();
       if (!cache) {
         console.log(
-          '💡 Run without --use-cache to fetch fresh data from Luma API'
+          "💡 Run without --use-cache to fetch fresh data from Luma API"
         );
         return;
       }
@@ -503,7 +503,7 @@ async function populateFeeders() {
 
         if (backfillEvents.length === 0) {
           console.log(
-            '❌ None of the specified event IDs were found in the event list'
+            "❌ None of the specified event IDs were found in the event list"
           );
           return;
         }
@@ -524,7 +524,7 @@ async function populateFeeders() {
           }
         }
       } else {
-        console.log('\n📥 Fetching guest data for all events...');
+        console.log("\n📥 Fetching guest data for all events...");
         for (const eventEntry of events) {
           const event = eventEntry.event;
           console.log(`\n📍 Fetching guests for: ${event.name}`);
@@ -545,8 +545,8 @@ async function populateFeeders() {
 
       // If cache-only mode, exit here
       if (CACHE_ONLY) {
-        console.log('\n📊 Cache Summary:');
-        console.log('═══════════════════════════════════════');
+        console.log("\n📊 Cache Summary:");
+        console.log("═══════════════════════════════════════");
         console.log(`Events fetched:      ${events.length}`);
         console.log(
           `Total guests data:   ${Object.values(eventGuests).reduce(
@@ -555,14 +555,14 @@ async function populateFeeders() {
           )}`
         );
         console.log(`Cache file:          ${CACHE_FILE}`);
-        console.log('═══════════════════════════════════════');
-        console.log('\n✅ Cache-only mode complete! Data saved successfully.');
+        console.log("═══════════════════════════════════════");
+        console.log("\n✅ Cache-only mode complete! Data saved successfully.");
         return;
       }
     }
 
     // Process events
-    console.log('\n🔄 Processing events and identifying feeders...');
+    console.log("\n🔄 Processing events and identifying feeders...");
 
     // In backfill mode, only process events we fetched guests for
     const eventsToProcess =
@@ -584,7 +584,7 @@ async function populateFeeders() {
       stats.guestsChecked += guests.length;
 
       if (guests.length === 0) {
-        console.log('   No guests found');
+        console.log("   No guests found");
         continue;
       }
 
@@ -598,8 +598,8 @@ async function populateFeeders() {
     }
 
     // Print summary
-    console.log('\n📊 Summary:');
-    console.log('═══════════════════════════════════════');
+    console.log("\n📊 Summary:");
+    console.log("═══════════════════════════════════════");
     if (BACKFILL_EVENT_IDS.length > 0) {
       console.log(
         `Mode:                BACKFILL (${BACKFILL_EVENT_IDS.length} events)`
@@ -614,18 +614,18 @@ async function populateFeeders() {
     console.log(
       `Guest API calls:     ${guestApiCallCount} events' guests fetched`
     );
-    console.log('═══════════════════════════════════════');
+    console.log("═══════════════════════════════════════");
 
     if (DRY_RUN) {
-      console.log('\n✅ Dry run completed successfully!');
-      console.log('Run without --dry-run flag to update the database.');
+      console.log("\n✅ Dry run completed successfully!");
+      console.log("Run without --dry-run flag to update the database.");
     } else if (BACKFILL_EVENT_IDS.length > 0) {
-      console.log('\n✅ Backfill completed!');
+      console.log("\n✅ Backfill completed!");
     } else {
-      console.log('\n✅ Feeder data population completed!');
+      console.log("\n✅ Feeder data population completed!");
     }
   } catch (error) {
-    console.error('❌ Fatal error:', error);
+    console.error("❌ Fatal error:", error);
     process.exit(1);
   }
 }

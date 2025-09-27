@@ -1,38 +1,38 @@
-import { Client, Constants, CommandInteraction } from 'eris';
-import { config } from './config.js';
-import { handleWelcomeMessage } from './commands/welcome.js';
-import { handleMatchRequest } from './commands/match.js';
+import { Client, Constants, CommandInteraction } from "eris";
+import { config } from "./config.js";
+import { handleWelcomeMessage } from "./commands/welcome.js";
+import { handleMatchRequest } from "./commands/match.js";
 
 const bot = new Client(config.DISCORD_TOKEN);
 
-bot.on('ready', () => {
-  console.log('Discord bot is ready!');
+bot.on("ready", () => {
+  console.log("Discord bot is ready!");
 
   const commands = [
     {
-      name: 'internal_welcome_message',
-      description: 'Generate a welcome message for a new user',
+      name: "internal_welcome_message",
+      description: "Generate a welcome message for a new user",
       options: [
         {
-          name: 'target',
-          description: 'The user to welcome',
+          name: "target",
+          description: "The user to welcome",
           type: Constants.ApplicationCommandOptionTypes.USER,
           required: true,
         },
       ],
     },
     {
-      name: 'match',
-      description: 'Tennis match commands',
+      name: "match",
+      description: "Tennis match commands",
       options: [
         {
-          name: 'request',
-          description: 'Request a match at a specific location',
+          name: "request",
+          description: "Request a match at a specific location",
           type: Constants.ApplicationCommandOptionTypes.SUB_COMMAND,
           options: [
             {
-              name: 'location',
-              description: 'Where you want to play',
+              name: "location",
+              description: "Where you want to play",
               type: Constants.ApplicationCommandOptionTypes.STRING,
               required: true,
             },
@@ -56,11 +56,11 @@ bot.on('ready', () => {
   });
 });
 
-bot.on('interactionCreate', async interaction => {
+bot.on("interactionCreate", async interaction => {
   if (interaction.type === Constants.InteractionTypes.APPLICATION_COMMAND) {
     const cmdInteraction = interaction as CommandInteraction;
 
-    console.log('Received interaction:', {
+    console.log("Received interaction:", {
       type: cmdInteraction.type,
       commandName: cmdInteraction.data?.name,
       options: cmdInteraction.data?.options,
@@ -72,18 +72,18 @@ bot.on('interactionCreate', async interaction => {
     try {
       console.log(`Processing command: ${commandName}`);
 
-      if (commandName === 'internal_welcome_message') {
+      if (commandName === "internal_welcome_message") {
         await handleWelcomeMessage(cmdInteraction);
-      } else if (commandName === 'match' && options?.[0]?.name === 'request') {
+      } else if (commandName === "match" && options?.[0]?.name === "request") {
         await handleMatchRequest(cmdInteraction);
       } else {
-        console.log('Unknown command or subcommand:', commandName, options);
+        console.log("Unknown command or subcommand:", commandName, options);
       }
     } catch (error) {
-      console.error('Error handling interaction:', error);
+      console.error("Error handling interaction:", error);
 
       const errorMessage =
-        'Sorry, something went wrong processing your command.';
+        "Sorry, something went wrong processing your command.";
 
       if (cmdInteraction.acknowledged) {
         await cmdInteraction.editOriginalMessage({
@@ -107,8 +107,8 @@ bot.on('interactionCreate', async interaction => {
   }
 });
 
-bot.on('error', (err: Error) => {
-  console.error('Discord bot error:', err);
+bot.on("error", (err: Error) => {
+  console.error("Discord bot error:", err);
 });
 
 bot.connect();

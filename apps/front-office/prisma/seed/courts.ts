@@ -1,24 +1,24 @@
-import { PrismaClient, bookingStyle } from '../../app/generated/prisma';
-import { parse } from 'csv-parse/sync';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { PrismaClient, bookingStyle } from "../../app/generated/prisma";
+import { parse } from "csv-parse/sync";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 const prisma = new PrismaClient();
 
 const locationNameMap: Record<string, string> = {
   StMarys: "St. Mary's",
-  parkside: 'Parkside',
-  CrockerAmazon: 'Crocker Amazon',
-  PotreroHill: 'Potrero Hill',
-  MinnieLovie: 'Minnie Lovie',
+  parkside: "Parkside",
+  CrockerAmazon: "Crocker Amazon",
+  PotreroHill: "Potrero Hill",
+  MinnieLovie: "Minnie Lovie",
 };
 
 function humanizeLocationName(raw: string): string {
   if (locationNameMap[raw]) return locationNameMap[raw];
   // Insert spaces before capital letters, capitalize first letter
   return raw
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/^./, s => s.toUpperCase());
 }
 
@@ -41,13 +41,13 @@ interface CourtRecord {
 }
 
 async function seedCourts() {
-  console.log('Seeding courts and locations...');
+  console.log("Seeding courts and locations...");
 
   // Read and parse the CSV file
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
-  const csvFilePath = join(__dirname, 'courts.csv');
-  const fileContent = readFileSync(csvFilePath, 'utf-8');
+  const csvFilePath = join(__dirname, "courts.csv");
+  const fileContent = readFileSync(csvFilePath, "utf-8");
   const records = parse(fileContent, {
     columns: true,
     skip_empty_lines: true,
@@ -91,7 +91,7 @@ async function seedCourts() {
 
       if (courtId && bookingStyleStr && bookingDuration) {
         const style =
-          bookingStyleStr === 'SevenDaysBefore8AM'
+          bookingStyleStr === "SevenDaysBefore8AM"
             ? bookingStyle.seven_days_before_8am
             : bookingStyle.two_days_before_noon;
 
@@ -117,7 +117,7 @@ async function seedCourts() {
     ]);
   }
 
-  console.log('Court seeding completed!');
+  console.log("Court seeding completed!");
 }
 
 async function main() {
@@ -126,7 +126,7 @@ async function main() {
 
 // Only run directly if this file is executed directly
 if (
-  typeof import.meta !== 'undefined' &&
+  typeof import.meta !== "undefined" &&
   import.meta.url === `file://${process.argv[1]}`
 ) {
   main()

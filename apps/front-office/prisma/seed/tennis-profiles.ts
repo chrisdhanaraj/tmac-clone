@@ -3,7 +3,7 @@
  * Script to import cleaned roster CSV data into TennisProfile table using Prisma
  */
 
-import 'dotenv/config';
+import "dotenv/config";
 import {
   PrismaClient,
   Gender,
@@ -13,11 +13,11 @@ import {
   TmacGearPreference,
   GearSize,
   TennisRanking,
-} from '../../app/generated/prisma';
-import { parse } from 'csv-parse/sync';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+} from "../../app/generated/prisma";
+import { parse } from "csv-parse/sync";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 const prisma = new PrismaClient();
 
@@ -116,7 +116,7 @@ function parseDate(dateString: string): Date | null {
 }
 
 function cleanStringValue(value: string): string | null {
-  if (!value || value.trim() === '' || value.toLowerCase() === 'n/a') {
+  if (!value || value.trim() === "" || value.toLowerCase() === "n/a") {
     return null;
   }
   return value.trim();
@@ -147,11 +147,11 @@ function transformRecord(record: CleanedRosterRecord) {
 async function checkForDuplicates(
   records: CleanedRosterRecord[]
 ): Promise<Set<string>> {
-  console.log('🔍 Checking for existing profiles...');
+  console.log("🔍 Checking for existing profiles...");
 
   const emails = records
     .map(r => r.email)
-    .filter(email => email && email.trim() !== '')
+    .filter(email => email && email.trim() !== "")
     .map(email => email.trim().toLowerCase());
 
   const existingProfiles = await prisma.tennisProfile.findMany({
@@ -198,7 +198,7 @@ async function importBatch(
       }
 
       // Skip records without email
-      if (!record.email || record.email.trim() === '') {
+      if (!record.email || record.email.trim() === "") {
         console.log(
           `   ⚠️  Skipping record without email: ${record.firstName} ${record.lastName}`
         );
@@ -239,7 +239,7 @@ async function importBatch(
       }
     } catch (error) {
       console.error(
-        `   ❌ Error importing ${record.email}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `   ❌ Error importing ${record.email}: ${error instanceof Error ? error.message : "Unknown error"}`
       );
       results.errors++;
     }
@@ -253,26 +253,26 @@ async function importTennisProfiles(
 ): Promise<ImportStats> {
   const { dryRun = false, batchSize = 100, skipDuplicates = true } = options;
 
-  console.log('🎾 Starting Tennis Profile Import');
-  console.log(`   Mode: ${dryRun ? 'DRY RUN' : 'LIVE IMPORT'}`);
+  console.log("🎾 Starting Tennis Profile Import");
+  console.log(`   Mode: ${dryRun ? "DRY RUN" : "LIVE IMPORT"}`);
   console.log(`   Batch size: ${batchSize}`);
-  console.log('');
+  console.log("");
 
   try {
     // Read and parse the CSV file
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
-    const csvFilePath = join(__dirname, '../../data/roster_cleaned.csv');
+    const csvFilePath = join(__dirname, "../../data/roster_cleaned.csv");
 
     console.log(`📂 Reading CSV from: ${csvFilePath}`);
-    const fileContent = readFileSync(csvFilePath, 'utf-8');
+    const fileContent = readFileSync(csvFilePath, "utf-8");
     const records = parse(fileContent, {
       columns: true,
       skip_empty_lines: true,
     }) as CleanedRosterRecord[];
 
     console.log(`📊 Found ${records.length} records to process`);
-    console.log('');
+    console.log("");
 
     // Check for existing duplicates
     const existingEmails = skipDuplicates
@@ -307,31 +307,31 @@ async function importTennisProfiles(
       console.log(
         `   Batch results: ${batchResults.imported} imported, ${batchResults.skipped} skipped, ${batchResults.duplicates} duplicates, ${batchResults.errors} errors`
       );
-      console.log('');
+      console.log("");
     }
 
     return stats;
   } catch (error) {
-    console.error('💥 Import failed:', error);
+    console.error("💥 Import failed:", error);
     throw error;
   }
 }
 
 function printImportSummary(stats: ImportStats, dryRun: boolean) {
-  console.log('📋 IMPORT SUMMARY');
-  console.log('='.repeat(50));
+  console.log("📋 IMPORT SUMMARY");
+  console.log("=".repeat(50));
   console.log(`Total records processed: ${stats.totalRecords}`);
   console.log(
-    `${dryRun ? 'Would import' : 'Successfully imported'}: ${stats.imported}`
+    `${dryRun ? "Would import" : "Successfully imported"}: ${stats.imported}`
   );
   console.log(`Skipped (missing data): ${stats.skipped}`);
   console.log(`Duplicates found: ${stats.duplicates}`);
   console.log(`Errors encountered: ${stats.errors}`);
-  console.log('');
+  console.log("");
 
   if (dryRun) {
-    console.log('🔍 This was a dry run. No data was actually imported.');
-    console.log('💡 Run without --dry-run flag to perform actual import.');
+    console.log("🔍 This was a dry run. No data was actually imported.");
+    console.log("💡 Run without --dry-run flag to perform actual import.");
   } else {
     console.log(
       `✨ Import complete! ${stats.imported} tennis profiles added to database.`
@@ -342,9 +342,9 @@ function printImportSummary(stats: ImportStats, dryRun: boolean) {
 async function main() {
   // Parse command line arguments
   const args = process.argv.slice(2);
-  const dryRun = args.includes('--dry-run');
-  const batchSizeArg = args.find(arg => arg.startsWith('--batch-size='));
-  const batchSize = batchSizeArg ? parseInt(batchSizeArg.split('=')[1]) : 100;
+  const dryRun = args.includes("--dry-run");
+  const batchSizeArg = args.find(arg => arg.startsWith("--batch-size="));
+  const batchSize = batchSizeArg ? parseInt(batchSizeArg.split("=")[1]) : 100;
 
   try {
     const stats = await importTennisProfiles({
@@ -355,7 +355,7 @@ async function main() {
 
     printImportSummary(stats, dryRun);
   } catch (error) {
-    console.error('Import failed:', error);
+    console.error("Import failed:", error);
     process.exit(1);
   }
 }

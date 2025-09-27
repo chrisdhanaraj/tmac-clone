@@ -1,9 +1,9 @@
-import type Eris from 'eris';
-import { Constants } from 'eris';
-import { config } from '../config.js';
+import type Eris from "eris";
+import { Constants } from "eris";
+import { config } from "../config.js";
 
 export async function handleMatchRequest(interaction: Eris.CommandInteraction) {
-  console.log('handleMatchRequest called');
+  console.log("handleMatchRequest called");
   // Get the location from the match request subcommand
   const subcommand = interaction.data.options?.[0];
   const locationOption =
@@ -14,21 +14,21 @@ export async function handleMatchRequest(interaction: Eris.CommandInteraction) {
     locationOption?.type === Constants.ApplicationCommandOptionTypes.STRING
       ? locationOption.value
       : undefined;
-  console.log('Location:', location);
+  console.log("Location:", location);
 
   // Acknowledge the interaction immediately
-  console.log('Acknowledging interaction...');
+  console.log("Acknowledging interaction...");
   await interaction.acknowledge();
 
   try {
     // Call the front-office API to create match request
     const apiUrl = `${config.FRONT_OFFICE_URL}/api/chat/match-request`;
-    console.log('Making API call to:', apiUrl);
+    console.log("Making API call to:", apiUrl);
 
     const response = await fetch(apiUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         discordUserId: interaction.member?.id || interaction.user?.id,
@@ -48,16 +48,16 @@ export async function handleMatchRequest(interaction: Eris.CommandInteraction) {
       `🎾 **Match Request**\n\n` +
       `**Player:** <@${interaction.member?.id || interaction.user?.id}>\n` +
       `**Location:** ${matchRequest.location}\n` +
-      `**Status:** ${matchRequest.status || 'Open'}\n\n` +
+      `**Status:** ${matchRequest.status || "Open"}\n\n` +
       `React with 🎾 to join this match!`;
 
     await interaction.editOriginalMessage({
       content: message,
     });
   } catch (error) {
-    console.error('Error creating match request:', error);
+    console.error("Error creating match request:", error);
     await interaction.editOriginalMessage({
-      content: 'Sorry, I encountered an error creating your match request.',
+      content: "Sorry, I encountered an error creating your match request.",
     });
   }
 }

@@ -1,35 +1,35 @@
-import { prismaAdapter } from 'better-auth/adapters/prisma';
-import prisma from '~/config/prisma';
-import { betterAuth } from 'better-auth';
-import { organization } from 'better-auth/plugins';
-import { createAccessControl } from 'better-auth/plugins/access';
-import { config } from '~/config/env';
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import prisma from "~/config/prisma";
+import { betterAuth } from "better-auth";
+import { organization } from "better-auth/plugins";
+import { createAccessControl } from "better-auth/plugins/access";
+import { config } from "~/config/env";
 
 // Define access control statements for events, users, and roles resources
 const statement = {
-  events: ['read', 'create', 'update', 'delete'],
-  users: ['read', 'create', 'update', 'delete', 'super'],
-  roles: ['assign', 'remove'],
+  events: ["read", "create", "update", "delete"],
+  users: ["read", "create", "update", "delete", "super"],
+  roles: ["assign", "remove"],
 } as const;
 
 const ac = createAccessControl(statement);
 
 // Define custom roles with specific permissions
 const admin = ac.newRole({
-  events: ['read', 'create', 'update', 'delete'],
-  users: ['read', 'create', 'update', 'delete', 'super'], // Admin can access PII
-  roles: ['assign', 'remove'],
+  events: ["read", "create", "update", "delete"],
+  users: ["read", "create", "update", "delete", "super"], // Admin can access PII
+  roles: ["assign", "remove"],
 });
 
 const eventManager = ac.newRole({
-  events: ['read', 'create', 'update', 'delete'],
-  users: ['read'], // Can view user roles but not edit, no PII access
+  events: ["read", "create", "update", "delete"],
+  users: ["read"], // Can view user roles but not edit, no PII access
   roles: [], // Cannot assign/remove roles
 });
 
 const member = ac.newRole({
-  events: ['read'], // Can only view published events
-  users: ['read'], // Can view user roles but not edit, no PII access
+  events: ["read"], // Can only view published events
+  users: ["read"], // Can view user roles but not edit, no PII access
   roles: [], // Cannot assign/remove roles
 });
 
@@ -39,7 +39,7 @@ export const auth = betterAuth({
     enabled: true,
   },
   database: prismaAdapter(prisma, {
-    provider: 'postgresql',
+    provider: "postgresql",
   }),
   session: {
     cookieCache: {
@@ -50,11 +50,11 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       firstName: {
-        type: 'string',
+        type: "string",
         required: true,
       },
       lastName: {
-        type: 'string',
+        type: "string",
         required: true,
       },
     },

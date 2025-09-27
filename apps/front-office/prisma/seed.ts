@@ -1,11 +1,11 @@
-import { PrismaClient } from '../app/generated/prisma';
-import { seedTennisRoles } from './seed/tennis-roles';
-import { seedCourts } from './seed/courts';
+import { PrismaClient } from "../app/generated/prisma";
+import { seedTennisRoles } from "./seed/tennis-roles";
+import { seedCourts } from "./seed/courts";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting database seeding...');
+  console.log("🌱 Starting database seeding...");
 
   try {
     // Seed courts first
@@ -14,9 +14,9 @@ async function main() {
     // Seed tennis roles
     await seedTennisRoles();
 
-    console.log('🎉 All seeding completed successfully!');
+    console.log("🎉 All seeding completed successfully!");
   } catch (error) {
-    console.error('💥 Seeding failed:', error);
+    console.error("💥 Seeding failed:", error);
     process.exit(1);
   }
 }

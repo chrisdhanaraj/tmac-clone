@@ -1,12 +1,12 @@
 export function loader() {
-  console.log('loader');
+  console.log("loader");
 }
 
 export default function Home() {
   return (
     <div
       style={{
-        backgroundColor: 'red',
+        backgroundColor: "red",
       }}
     >
       Home
