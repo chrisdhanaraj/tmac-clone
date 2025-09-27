@@ -1,0 +1,12 @@
+node_modules
+.react-router
+build
+dist
+.env
+.env.*
+pnpm-lock.yaml
+*.min.js
+*.min.css
+app/generated/
+coverage/
+.nyc_output/

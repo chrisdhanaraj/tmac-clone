@@ -80,7 +80,7 @@ interface LumaGuestEntry {
  * Get backfill event IDs from command line arguments
  */
 function getBackfillEventIds(): string[] {
-  const backfillArg = process.argv.find((arg) => arg.startsWith("--backfill="));
+  const backfillArg = process.argv.find(arg => arg.startsWith("--backfill="));
   if (!backfillArg) return [];
 
   const idsString = backfillArg.split("=")[1];
@@ -94,7 +94,7 @@ function getBackfillEventIds(): string[] {
     // Fall back to comma-separated
     return idsString
       .split(",")
-      .map((id) => id.trim())
+      .map(id => id.trim())
       .filter(Boolean);
   }
 }
@@ -172,7 +172,7 @@ async function fetchAllEvents(): Promise<LumaEventEntry[]> {
 
       // Add delay between pages to avoid rate limiting
       if (cursor) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
     } while (cursor);
 
@@ -201,7 +201,7 @@ async function fetchEventGuests(eventId: string): Promise<LumaGuestEntry[]> {
     console.log(
       `\n⏳ Rate limiting: waiting 10 seconds after ${guestApiCallCount} events processed...`
     );
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
   }
 
   try {
@@ -238,7 +238,7 @@ async function fetchEventGuests(eventId: string): Promise<LumaGuestEntry[]> {
 
       // Add small delay between pages to avoid rate limiting
       if (cursor) {
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise(resolve => setTimeout(resolve, 50));
       }
     } while (cursor);
 
@@ -338,7 +338,7 @@ async function processFeeders(
 ): Promise<void> {
   // Debug: Show structure of first guest with registration_answers
   const guestsWithAnswers = guestEntries.filter(
-    (entry) =>
+    entry =>
       entry.guest.registration_answers &&
       entry.guest.registration_answers.length > 0
   );
@@ -497,7 +497,7 @@ async function populateFeeders() {
           `\n📥 Fetching guest data for ${BACKFILL_EVENT_IDS.length} backfill events...`
         );
         // Only fetch guests for specified events
-        const backfillEvents = events.filter((e) =>
+        const backfillEvents = events.filter(e =>
           BACKFILL_EVENT_IDS.includes(e.event.api_id)
         );
 
@@ -567,7 +567,7 @@ async function populateFeeders() {
     // In backfill mode, only process events we fetched guests for
     const eventsToProcess =
       BACKFILL_EVENT_IDS.length > 0
-        ? events.filter((e) => BACKFILL_EVENT_IDS.includes(e.event.api_id))
+        ? events.filter(e => BACKFILL_EVENT_IDS.includes(e.event.api_id))
         : events;
 
     for (const eventEntry of eventsToProcess) {
@@ -594,7 +594,7 @@ async function populateFeeders() {
       await processFeeders(guests, new Date(event.start_at));
 
       // Add small delay to avoid rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
     // Print summary
