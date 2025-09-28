@@ -15,7 +15,8 @@ export async function generateWelcomeMessage(request: Request) {
       where: {
         discordId: discordUserId,
       },
-      include: {
+      select: {
+        firstName: true,
         tennisProfile: true,
       },
     });
@@ -28,7 +29,7 @@ export async function generateWelcomeMessage(request: Request) {
         ? profile.tennisRanking.replace("_", ".")
         : "Unknown";
       message =
-        `Welcome to Mission Athletic Club, ${profile.firstName || "Player"}! 🎾\n\n` +
+        `Welcome to Mission Athletic Club, ${user.firstName || "Player"}! 🎾\n\n` +
         `I see you're already in our system with a ${ranking} tennis ranking. ` +
         `Feel free to use the \`/match request\` command to find players to play with!`;
     } else if (user) {
