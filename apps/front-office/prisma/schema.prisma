@@ -170,7 +170,7 @@ model user {
   approved      Boolean           @default(false)
 
   name        String?
-  email       String
+  email       String       @unique
   firstName   String?
   lastName    String?
   members     member[]

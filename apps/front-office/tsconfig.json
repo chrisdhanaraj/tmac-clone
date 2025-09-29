@@ -3,7 +3,8 @@
     "app/**/*",
     "**/.server/**/*",
     "**/.client/**/*",
-    ".react-router/types/**/*"
+    ".react-router/types/**/*",
+    "./vitest-setup.ts"
   ],
   "exclude": [
     "node_modules",

@@ -4,6 +4,8 @@ Auto-generated from all feature plans. Last updated: 2025-09-28
 
 ## Active Technologies
 - TypeScript 5.8+ with strict mode enabled + React Router 7+, BetterAuth 1.2+, Prisma 6.8+, Zod 3.25+ (001-i-want-to)
+- TypeScript 5.8, React 19.1, Node.js 20+ + React Router 7.9, TanStack Table (via shadcn/ui), Prisma 6.8, Better Auth 1.2, Zod 3.25, Loops 6.0 (002-i-need-to)
+- PostgreSQL via Prisma ORM (existing User model with approved boolean field) (002-i-need-to)
 
 ## Project Structure
 ```
@@ -18,6 +20,7 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript 5.8+ with strict mode enabled: Follow standard conventions
 
 ## Recent Changes
+- 002-i-need-to: Added TypeScript 5.8, React 19.1, Node.js 20+ + React Router 7.9, TanStack Table (via shadcn/ui), Prisma 6.8, Better Auth 1.2, Zod 3.25, Loops 6.0
 - 001-i-want-to: Added TypeScript 5.8+ with strict mode enabled + React Router 7+, BetterAuth 1.2+, Prisma 6.8+, Zod 3.25+
 
 <!-- MANUAL ADDITIONS START -->

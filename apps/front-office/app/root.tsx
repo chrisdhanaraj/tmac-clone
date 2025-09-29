@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Toaster } from "sonner";
 
 import type { Route } from "./+types/root";
 import styles from "./app.css?url";
@@ -28,6 +29,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster position="top-right" />
         <ScrollRestoration />
         <Scripts />
       </body>
