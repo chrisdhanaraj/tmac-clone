@@ -1,4 +1,4 @@
-import { test, expect, chromium } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 test.describe("User Approval - Concurrent Operations", () => {
   test.beforeEach(async ({ page }) => {
@@ -167,7 +167,6 @@ test.describe("User Approval - Concurrent Operations", () => {
   test("multiple concurrent operations maintain independent loading states", async ({
     page,
   }) => {
-    const userIds = ["user-1", "user-2", "user-3"];
     const completedUsers = new Set<string>();
 
     // Mock API with variable delays
