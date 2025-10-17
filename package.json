@@ -9,5 +9,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "pnpm": {
+    "overrides": {
+      "on-headers": ">=1.1.0"
+    },
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "@tailwindcss/oxide",
+      "prisma"
+    ]
+  }
 }
