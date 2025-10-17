@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from "react-router";
 import { auth } from "~/features/auth/api/auth.server";
 import prisma from "~/config/prisma";
 import { LoopsClient } from "loops";
-import { BulkApprovalSchema } from "~/features/user-management/validation/user-approval.schema";
+import { UserApprovalSchema } from "~/features/user-management/validation/user-approval.schema";
 
 /**
  * POST /api/users/approve - User approval (single or bulk)
@@ -41,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     // Parse and validate request body
     const body = await request.json();
-    const validatedData = BulkApprovalSchema.parse(body);
+    const validatedData = UserApprovalSchema.parse(body);
 
     if (validatedData.userIds.length > 100) {
       return new Response(
