@@ -37,19 +37,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw new Response("Forbidden", { status: 403 });
   }
 
+  // Parse query parameters and ensure default sort is in URL
+  const url = new URL(request.url);
+
+  // If sort params are missing, redirect with defaults
+  if (!url.searchParams.get("sortBy") || !url.searchParams.get("sortOrder")) {
+    if (!url.searchParams.get("sortBy"))
+      url.searchParams.set("sortBy", "createdAt");
+    if (!url.searchParams.get("sortOrder"))
+      url.searchParams.set("sortOrder", "desc");
+    throw redirect(url.pathname + "?" + url.searchParams.toString());
+  }
+
   try {
-    // Parse query parameters and ensure default sort is in URL
-    const url = new URL(request.url);
-
-    // If sort params are missing, redirect with defaults
-    if (!url.searchParams.get("sortBy") || !url.searchParams.get("sortOrder")) {
-      if (!url.searchParams.get("sortBy"))
-        url.searchParams.set("sortBy", "createdAt");
-      if (!url.searchParams.get("sortOrder"))
-        url.searchParams.set("sortOrder", "desc");
-      throw redirect(url.pathname + "?" + url.searchParams.toString());
-    }
-
     const queryParams = {
       page: url.searchParams.get("page") || "1",
       pageSize: url.searchParams.get("pageSize") || "50",
@@ -60,6 +60,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     };
 
     // Validate query parameters
+
     const validatedQuery = UserListQuerySchema.parse(queryParams);
     const { page, pageSize, search, approved, sortBy, sortOrder } =
       validatedQuery;

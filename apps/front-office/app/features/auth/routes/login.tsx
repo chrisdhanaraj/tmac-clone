@@ -22,7 +22,7 @@ import { auth } from "../api/auth.server";
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await auth.api.getSession({ headers: request.headers });
   if (session) {
-    throw redirect("/user");
+    throw redirect("/dashboard/users");
   }
   return null;
 }

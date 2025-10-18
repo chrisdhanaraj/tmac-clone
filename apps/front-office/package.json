@@ -5,7 +5,7 @@
   "scripts": {
     "build": "pnpm db:generate && react-router build",
     "dev": "react-router dev",
-    "dev:prod": "dotenv -e .env.production -- sh -c 'BETTER_AUTH_URL=http://localhost:5173 react-router dev'",
+    "dev:prod": "dotenv -e .env.production -- sh -c 'AUTH_BASE_URL=http://localhost:5173 react-router dev'",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "test": "vitest",

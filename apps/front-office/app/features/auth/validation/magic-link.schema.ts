@@ -10,7 +10,7 @@ export const MagicLinkRequestSchema = z.object({
     .min(1, "Email is required")
     .email("Please enter a valid email address")
     .max(254, "Email address too long"),
-  callbackURL: z.string().optional().default("/user"),
+  callbackURL: z.string().optional().default("/dashboard/users"),
 });
 
 /**
@@ -22,7 +22,7 @@ export const MagicLinkVerifySchema = z.object({
     .string()
     .min(1, "Token is required")
     .max(512, "Invalid token format"),
-  callbackURL: z.string().optional().default("/user"),
+  callbackURL: z.string().optional().default("/dashboard/users"),
 });
 
 /**
