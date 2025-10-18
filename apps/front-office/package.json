@@ -5,6 +5,7 @@
   "scripts": {
     "build": "pnpm db:generate && react-router build",
     "dev": "react-router dev",
+    "dev:prod": "dotenv -e .env.production -- sh -c 'BETTER_AUTH_URL=http://localhost:5173 react-router dev'",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "test": "vitest",
@@ -14,10 +15,18 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:push": "prisma db push",
+    "db:studio:prod": "dotenv -e .env.production -- prisma studio",
+    "db:push:prod": "dotenv -e .env.production -- prisma db push",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "seed:analyze-intake": "tsx scripts/seed-intake-form/run-analysis.ts",
+    "seed:test-intake": "tsx scripts/seed-intake-form/test-runner.ts",
+    "seed:intake-form": "tsx scripts/seed-intake-form/main.ts",
+    "seed:analyze-intake:prod": "dotenv -e .env.production -- tsx scripts/seed-intake-form/run-analysis.ts",
+    "seed:test-intake:prod": "dotenv -e .env.production -- tsx scripts/seed-intake-form/test-runner.ts",
+    "seed:intake-form:prod": "dotenv -e .env.production -- tsx scripts/seed-intake-form/main.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",

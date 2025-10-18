@@ -14,5 +14,5 @@ export default [
   route("api/users/:userId", "features/user-management/api/get-user.ts"),
   route("api/users", "features/user-management/api/index.ts"),
   route("api/admin/assign-roles", "api/admin/assign-roles.ts"),
-  route("api/intake/submit", "features/intake/api/submit.ts"),
+  route("api/intake/log", "features/intake/api/log.ts"),
 ] satisfies RouteConfig;

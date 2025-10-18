@@ -8,7 +8,7 @@ export const config = {
     baseURL:
       process.env.AUTH_BASE_URL ||
       (process.env.NODE_ENV === "production"
-        ? "https://your-production-url.com"
+        ? "https://frontoffice.missionathletic.club"
         : "http://localhost:5173"),
   },
   app: {
