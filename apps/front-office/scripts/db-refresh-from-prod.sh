@@ -22,6 +22,7 @@ command -v psql >/dev/null 2>&1 || { echo -e "${RED}Error: psql is not installed
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
+
 # Check if .env files exist
 if [ ! -f "$PROJECT_DIR/.env" ]; then
     echo -e "${RED}Error: .env file not found at $PROJECT_DIR/.env${NC}"
@@ -35,11 +36,31 @@ fi
 
 # Load environment variables
 echo -e "${YELLOW}📋 Loading environment variables...${NC}"
-export $(grep -v '^#' "$PROJECT_DIR/.env" | grep DATABASE_URL | xargs)
+
+# Load LOCAL .env
+set -a  # automatically export all vars loaded from the file
+. "$PROJECT_DIR/.env"
+set +a
 LOCAL_DATABASE_URL="$DATABASE_URL"
 
-export $(grep -v '^#' "$PROJECT_DIR/.env.production" | grep DATABASE_URL | xargs)
+# Load PROD .env.production
+unset DATABASE_URL  # clear previous one to avoid bleed-over
+set -a
+. "$PROJECT_DIR/.env.production"
+set +a
 PROD_DATABASE_URL="$DATABASE_URL"
+
+# Sanity checks
+if [ -z "$LOCAL_DATABASE_URL" ]; then
+  echo -e "${RED}Error: DATABASE_URL not found in .env${NC}"
+  exit 1
+fi
+
+if [ -z "$PROD_DATABASE_URL" ]; then
+  echo -e "${RED}Error: DATABASE_URL not found in .env.production${NC}"
+  exit 1
+fi
+
 
 if [ -z "$LOCAL_DATABASE_URL" ]; then
     echo -e "${RED}Error: DATABASE_URL not found in .env${NC}"
