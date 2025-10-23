@@ -1,7 +1,6 @@
 node_modules/
 dist/
 .playwright-mcp
-scripts
 
 .DS_Store
 

@@ -15,6 +15,7 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:push": "prisma db push",
+    "db:refresh": "bash scripts/db-refresh-from-prod.sh",
     "db:studio:prod": "dotenv -e .env.production -- prisma studio",
     "db:push:prod": "dotenv -e .env.production -- prisma db push",
     "lint": "eslint . --fix",
