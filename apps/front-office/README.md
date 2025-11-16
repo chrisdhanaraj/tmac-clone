@@ -47,7 +47,14 @@ DISCORD_TOKEN=your_discord_bot_token
 # Auth (Better Auth)
 BETTER_AUTH_SECRET=your_random_secret_key
 BETTER_AUTH_URL=http://localhost:3000
+
+# Intake sync
+GOOGLE_SHEET_ID=1LcQsdw5zhYDXbmLjFpdJX8FBcsaDmKuZzM9uTOyMxJA
+GOOGLE_SERVICE_ACCOUNT_JSON='{"type":"service_account", ... }'
 ```
+
+> The Google service-account JSON should be added as a single-line string (wrap in single quotes and keep `\n` sequences for the private key).  
+> In Render, store the same value in a secret env var so the credential is never committed; if a file path is required at runtime, write the secret to `/tmp/service-account.json` during startup and point code to that path.
 
 ### Installation
 
@@ -93,6 +100,11 @@ Your application will be available at `http://localhost:5173`.
 
 - `POST /api/chat/welcome` - Generate welcome messages for Discord users
 - `POST /api/chat/match-request` - Create tennis match requests
+
+### Intake
+
+- `POST /api/intake/submit` - Receive live intake submissions from Google Apps Script
+- `GET /api/intake/sync` - Backfill users directly from the Google Sheet (used by Render cron)
 
 ### Authentication
 

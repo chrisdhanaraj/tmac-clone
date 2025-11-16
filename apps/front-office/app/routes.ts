@@ -14,5 +14,6 @@ export default [
   route("api/users/:userId", "features/user-management/api/get-user.ts"),
   route("api/users", "features/user-management/api/index.ts"),
   route("api/admin/assign-roles", "api/admin/assign-roles.ts"),
-  route("api/intake/log", "features/intake/api/log.ts"),
+  // Cron callers must include `x-sync-secret: <SYNC_SECRET>`
+  route("api/sheets-to-db-sync", "features/sync/route.ts"),
 ] satisfies RouteConfig;

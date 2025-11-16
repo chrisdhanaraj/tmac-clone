@@ -3,25 +3,34 @@
 Auto-generated from all feature plans. Last updated: 2025-09-28
 
 ## Active Technologies
+
 - TypeScript 5.8+ with strict mode enabled + React Router 7+, BetterAuth 1.2+, Prisma 6.8+, Zod 3.25+ (001-i-want-to)
 - TypeScript 5.8, React 19.1, Node.js 20+ + React Router 7.9, TanStack Table (via shadcn/ui), Prisma 6.8, Better Auth 1.2, Zod 3.25, Loops 6.0 (002-i-need-to)
 - PostgreSQL via Prisma ORM (existing User model with approved boolean field) (002-i-need-to)
+- TypeScript / Node 18 (React Router v7 front-office app) + React Router loaders/actions (Remix runtime), Prisma Client, `@googleapis/sheets`, `google-auth-library`, existing intake sync helpers (001-sync-sheet-db)
+- PostgreSQL via Prisma (users + tennisProfile tables) (001-sync-sheet-db)
+- TypeScript / Node 18 (React Router v7 / Remix-style front-office app) + React Router loaders/actions (Remix runtime), Prisma Client, `@googleapis/sheets`, `google-auth-library`, existing intake sync helpers (001-sync-sheet-db)
 
 ## Project Structure
+
 ```
 src/
 tests/
 ```
 
 ## Commands
+
 npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNOLOGIES] npm run lint
 
 ## Code Style
+
 TypeScript 5.8+ with strict mode enabled: Follow standard conventions
 
 ## Recent Changes
+
+- 001-sync-sheet-db: Added TypeScript / Node 18 (React Router v7 / Remix-style front-office app) + React Router loaders/actions (Remix runtime), Prisma Client, `@googleapis/sheets`, `google-auth-library`, existing intake sync helpers
+- 001-sync-sheet-db: Added TypeScript / Node 18 (React Router v7 front-office app) + React Router loaders/actions (Remix runtime), Prisma Client, `@googleapis/sheets`, `google-auth-library`, existing intake sync helpers
 - 002-i-need-to: Added TypeScript 5.8, React 19.1, Node.js 20+ + React Router 7.9, TanStack Table (via shadcn/ui), Prisma 6.8, Better Auth 1.2, Zod 3.25, Loops 6.0
-- 001-i-want-to: Added TypeScript 5.8+ with strict mode enabled + React Router 7+, BetterAuth 1.2+, Prisma 6.8+, Zod 3.25+
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

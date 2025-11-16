@@ -1,4 +1,4 @@
-import prisma from "../../app/config/prisma";
+import prisma from "~/config/prisma";
 import type { ProcessedUserData } from "./types";
 
 export class DatabaseSeeder {

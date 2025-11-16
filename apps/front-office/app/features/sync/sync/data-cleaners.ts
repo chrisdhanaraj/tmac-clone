@@ -18,7 +18,7 @@ export function cleanPhone(phone: string): string | null {
   if (!phone) return null;
 
   // Remove all non-digit characters except + for international numbers
-  let cleaned = phone.replace(/[^\d+]/g, "");
+  const cleaned = phone.replace(/[^\d+]/g, "");
 
   // Handle common formats
   if (cleaned.startsWith("1") && cleaned.length === 11) {
@@ -47,7 +47,7 @@ export function cleanInstagramHandle(instagram: string): string | null {
   cleaned = cleaned.replace(/^(https?:\/\/)?(www\.)?(instagram\.com\/)?@?/, "");
 
   // Remove trailing slashes or other characters
-  cleaned = cleaned.replace(/[\/\s]*$/, "");
+  cleaned = cleaned.replace(/[/\s]*$/, "");
 
   // Enforce database limit of 50 characters
   if (cleaned.length > 50) {

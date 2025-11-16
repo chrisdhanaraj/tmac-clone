@@ -26,5 +26,5 @@ scripts/luma/luma-data-cache.json
 
 # AI
 .claude/settings.local.json
-
 .specify
+specs
