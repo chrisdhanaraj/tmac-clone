@@ -1,5 +1,6 @@
 import prisma from "~/config/prisma";
 import type { ProcessedUserData } from "./types";
+import { logger } from "@tmac/shared/logger";
 
 export class DatabaseSeeder {
   async seedUsers(processedData: ProcessedUserData[]): Promise<{
@@ -18,12 +19,12 @@ export class DatabaseSeeder {
         const wasUpdated = await this.upsertUserWithProfile(userData);
         if (wasUpdated) {
           results.updated++;
-          console.log(
+          logger.info(
             `↻ Updated user: ${userData.firstName} ${userData.lastName} (${userData.email})`
           );
         } else {
           results.created++;
-          console.log(
+          logger.info(
             `✓ Created user: ${userData.firstName} ${userData.lastName} (${userData.email})`
           );
         }
@@ -34,7 +35,7 @@ export class DatabaseSeeder {
           email: userData.email,
           error: errorMessage,
         });
-        console.error(
+        logger.error(
           `✗ Error upserting user ${userData.email}: ${errorMessage}`
         );
       }
@@ -60,7 +61,7 @@ export class DatabaseSeeder {
     this.validateDataLengths(userData);
 
     // Update or create user and tennis profile in a transaction
-    await prisma.$transaction(async tx => {
+    await prisma.$transaction(async (tx) => {
       try {
         if (existingUser) {
           // Update existing user
@@ -209,11 +210,11 @@ export class DatabaseSeeder {
   }
 
   private logDetailedError(error: any, userData: ProcessedUserData): void {
-    console.error(`\n🚨 Detailed error for user: ${userData.email}`);
-    console.error(`Error message: ${error.message}`);
+    logger.error(`\n🚨 Detailed error for user: ${userData.email}`);
+    logger.error(`Error message: ${error.message}`);
 
     // Log all field lengths for debugging
-    console.error(`\n📏 Field lengths:`);
+    logger.error(`\n📏 Field lengths:`);
     const fieldsToCheck = {
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -233,25 +234,23 @@ export class DatabaseSeeder {
         const length = value.length;
         const preview =
           value.length > 50 ? `${value.substring(0, 50)}...` : value;
-        console.error(`  ${field}: ${length} chars - "${preview}"`);
+        logger.error(`  ${field}: ${length} chars - "${preview}"`);
       }
     });
 
     // Log original CSV data for reference
-    console.error(`\n📋 Original CSV data:`);
-    console.error(`  First Name: "${userData.originalRow.firstName}"`);
-    console.error(`  Last Name: "${userData.originalRow.lastName}"`);
-    console.error(`  Email: "${userData.originalRow.email}"`);
-    console.error(`  Phone: "${userData.originalRow.phone}"`);
-    console.error(`  Instagram: "${userData.originalRow.instagram}"`);
-    console.error(`  District: "${userData.originalRow.district}"`);
-    console.error(
-      `  Gear Preference: "${userData.originalRow.gearPreference}"`
-    );
-    console.error(`  Playlist Song: "${userData.originalRow.playlistSong}"`);
-    console.error(`  Why Join: "${userData.originalRow.whyJoin}"`);
-    console.error(`  Referred By: "${userData.originalRow.referredBy}"`);
-    console.error(
+    logger.error(`\n📋 Original CSV data:`);
+    logger.error(`  First Name: "${userData.originalRow.firstName}"`);
+    logger.error(`  Last Name: "${userData.originalRow.lastName}"`);
+    logger.error(`  Email: "${userData.originalRow.email}"`);
+    logger.error(`  Phone: "${userData.originalRow.phone}"`);
+    logger.error(`  Instagram: "${userData.originalRow.instagram}"`);
+    logger.error(`  District: "${userData.originalRow.district}"`);
+    logger.error(`  Gear Preference: "${userData.originalRow.gearPreference}"`);
+    logger.error(`  Playlist Song: "${userData.originalRow.playlistSong}"`);
+    logger.error(`  Why Join: "${userData.originalRow.whyJoin}"`);
+    logger.error(`  Referred By: "${userData.originalRow.referredBy}"`);
+    logger.error(
       `  Favorite Player: "${userData.originalRow.favoriteTennisPlayer}"`
     );
   }
@@ -268,7 +267,7 @@ export class DatabaseSeeder {
       },
     });
 
-    return existingUsers.map(user => user.email);
+    return existingUsers.map((user) => user.email);
   }
 
   async getStats(): Promise<{
@@ -296,7 +295,7 @@ export class DatabaseSeeder {
     if (!value) return value;
 
     if (value.length > maxLength) {
-      console.warn(
+      logger.warn(
         `⚠️  Truncating ${fieldName} from ${value.length} to ${maxLength} characters`
       );
       return value.substring(0, maxLength);

@@ -7,6 +7,7 @@ export default [
     route("users", "features/user-management/routes/users.tsx"),
   ]),
   route("user", "features/user/user.tsx"),
+  route("verify-discord", "features/discord-verification/routes/verify-discord.tsx"),
   route("api/auth/*", "features/auth/routes/auth.ts"),
   route("api/chat/welcome", "features/chat/routes/welcome.ts"),
   route("api/chat/match-request", "features/chat/routes/match-request.ts"),
@@ -14,6 +15,7 @@ export default [
   route("api/users/:userId", "features/user-management/api/get-user.ts"),
   route("api/users", "features/user-management/api/index.ts"),
   route("api/admin/assign-roles", "api/admin/assign-roles.ts"),
+  route("api/discord/verify", "features/discord-verification/api/verify.ts"),
   // Cron callers must include `x-sync-secret: <SYNC_SECRET>`
   route("api/sheets-to-db-sync", "features/sync/route.ts"),
 ] satisfies RouteConfig;

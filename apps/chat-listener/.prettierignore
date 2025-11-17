@@ -1,9 +1,0 @@
-node_modules
-dist
-.env
-.env.*
-pnpm-lock.yaml
-*.min.js
-*.min.css
-coverage/
-.nyc_output/

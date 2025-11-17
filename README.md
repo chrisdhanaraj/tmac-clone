@@ -18,4 +18,4 @@ pnpm --filter front-office test:run
 ## Apps
 
 - **Front Office** (webapp) - Tennis club management application
-- **Chat Listener** - Discord bot integration
+- **discord-bot** - Discord bot integration

@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { auth } from "~/features/auth/api/auth.server";
 import prisma from "~/config/prisma";
+import { logger } from "@tmac/shared/logger";
 
 /**
  * GET /api/users/:userId - Fetch single user for row refresh
@@ -81,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error fetching user:", error);
+    logger.error(error, "Error fetching user");
 
     return new Response(
       JSON.stringify({

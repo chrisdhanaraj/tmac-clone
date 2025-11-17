@@ -2,6 +2,7 @@ import type { LoaderFunctionArgs } from "react-router";
 import { auth } from "~/features/auth/api/auth.server";
 import prisma from "~/config/prisma";
 import { UserListQuerySchema } from "~/features/user-management/validation/user-approval.schema";
+import { logger } from "@tmac/shared/logger";
 
 /**
  * GET /api/users - Paginated user listing with filtering
@@ -123,7 +124,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error fetching users:", error);
+    logger.error(error, "Error fetching users");
 
     if (error instanceof Error && error.message.includes("validation")) {
       return new Response(

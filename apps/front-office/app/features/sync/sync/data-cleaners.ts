@@ -1,4 +1,5 @@
 // Data cleaning and validation utilities
+import { logger } from "@tmac/shared/logger";
 
 export function cleanEmail(email: string): string | null {
   if (!email) return null;
@@ -44,14 +45,17 @@ export function cleanInstagramHandle(instagram: string): string | null {
   let cleaned = instagram.trim();
 
   // Remove common prefixes
-  cleaned = cleaned.replace(/^(https?:\/\/)?(www\.)?(instagram\.com\/)?@?/, "");
+  cleaned = cleaned.replace(
+    /^(https?:\/\/)?(www\.)?(instagram\.com\/)?@?/,
+    ""
+  );
 
   // Remove trailing slashes or other characters
   cleaned = cleaned.replace(/[/\s]*$/, "");
 
   // Enforce database limit of 50 characters
   if (cleaned.length > 50) {
-    console.warn(
+    logger.warn(
       `⚠️  Instagram handle too long, truncating: "${cleaned}" -> "${cleaned.substring(
         0,
         50
@@ -147,7 +151,7 @@ export function cleanText(text: string, maxLength?: number): string | null {
   }
 
   if (maxLength && cleaned.length > maxLength) {
-    console.warn(
+    logger.warn(
       `⚠️  Text field too long, truncating from ${
         cleaned.length
       } to ${maxLength} characters: "${cleaned.substring(0, 100)}${
@@ -230,6 +234,6 @@ export function parseTimestamp(timestamp: string): Date | null {
     }
   }
 
-  console.warn(`⚠️  Could not parse timestamp: "${cleaned}"`);
+  logger.warn(`⚠️  Could not parse timestamp: "${cleaned}"`);
   return null;
 }

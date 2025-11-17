@@ -9,6 +9,7 @@ import {
   validateProcessedData,
 } from "./data-processor";
 import type { IntakeFormRow, ProcessedUserData } from "./types";
+import { logger } from "@tmac/shared/logger";
 
 type SeederLike = Pick<DatabaseSeeder, "seedUsers" | "disconnect">;
 
@@ -43,20 +44,20 @@ export async function syncIntakeFromGoogleSheet(
 
   const seeder: SeederLike = options.seeder ?? new DatabaseSeeder();
 
-  console.log("📥 Fetching intake rows from Google Sheets...");
+  logger.info("📥 Fetching intake rows from Google Sheets...");
   const rawRows = await fetchRows();
-  console.log(`   • Retrieved ${rawRows.length} total rows`);
+  logger.info(`   • Retrieved ${rawRows.length} total rows`);
 
   const skippedRows: { email: string | null; reason: string }[] = [];
 
-  const validRawRows = rawRows.filter(row => {
+  const validRawRows = rawRows.filter((row) => {
     const validation = validateRequiredFields(row);
     if (!validation.isValid) {
       skippedRows.push({
         email: row.email || row.emailAddress || null,
         reason: validation.errors.join(", "),
       });
-      console.warn(
+      logger.warn(
         `⚠️ Skipping raw row ${
           row.email || row.emailAddress || "unknown email"
         }: ${validation.errors.join(", ")}`
@@ -66,20 +67,20 @@ export async function syncIntakeFromGoogleSheet(
     return true;
   });
 
-  console.log(`   • ${validRawRows.length} rows passed raw validation`);
+  logger.info(`   • ${validRawRows.length} rows passed raw validation`);
 
-  const processedData: ProcessedUserData[] = validRawRows.map(row =>
+  const processedData: ProcessedUserData[] = validRawRows.map((row) =>
     processIntakeFormRow(row)
   );
 
-  const finalValidData = processedData.filter(data => {
+  const finalValidData = processedData.filter((data) => {
     const validation = validateProcessedData(data);
     if (!validation.isValid) {
       skippedRows.push({
         email: data.email,
         reason: validation.errors.join(", "),
       });
-      console.warn(
+      logger.warn(
         `⚠️ Skipping processed row ${data.email}: ${validation.errors.join(
           ", "
         )}`
@@ -89,16 +90,16 @@ export async function syncIntakeFromGoogleSheet(
     return true;
   });
 
-  console.log(`   • ${finalValidData.length} rows ready for Prisma upsert`);
+  logger.info(`   • ${finalValidData.length} rows ready for Prisma upsert`);
 
   const report = generateProcessingReport(processedData);
-  console.log(
+  logger.info(
     `📊 Report: ${report.validRecords} valid / ${report.invalidRecords} invalid`
   );
 
   try {
     const seedResults = await seeder.seedUsers(finalValidData);
-    console.log(
+    logger.info(
       `💾 Upsert finished: created=${seedResults.created}, updated=${seedResults.updated}, errors=${seedResults.errors.length}`
     );
 

@@ -1,14 +1,14 @@
-import { z } from "zod";
 import prisma from "../../config/prisma.js";
-
-const WelcomeRequestSchema = z.object({
-  discordUserId: z.string(),
-});
+import {
+  WelcomeRequestPayloadSchema,
+  WelcomeResponseSchema,
+} from "@tmac/shared/contracts/chat";
+import { logger } from "@tmac/shared/logger";
 
 export async function generateWelcomeMessage(request: Request) {
   try {
     const body = await request.json();
-    const { discordUserId } = WelcomeRequestSchema.parse(body);
+    const { discordUserId } = WelcomeRequestPayloadSchema.parse(body);
 
     // Try to find user by Discord ID
     const user = await prisma.user.findFirst({
@@ -43,12 +43,14 @@ export async function generateWelcomeMessage(request: Request) {
         `I don't see you in our member system yet. Please contact an administrator to get set up with your tennis profile and member access.`;
     }
 
-    return new Response(JSON.stringify({ message }), {
+    const responseBody = WelcomeResponseSchema.parse({ message });
+
+    return new Response(JSON.stringify(responseBody), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error generating welcome message:", error);
+    logger.error(error, "Error generating welcome message");
     return new Response(
       JSON.stringify({ error: "Failed to generate welcome message" }),
       {

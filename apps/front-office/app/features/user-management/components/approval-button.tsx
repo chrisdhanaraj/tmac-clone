@@ -2,6 +2,7 @@ import { useApprovalMutation } from "~/features/user-management/hooks/use-approv
 import { Button } from "~/components/ui/button";
 import { Loader2 } from "lucide-react";
 import type { UserDisplay } from "../validation/user-approval.schema";
+import { logger } from "@tmac/shared/logger";
 
 interface ApprovalButtonProps {
   userId: string;
@@ -36,7 +37,7 @@ export function ApprovalButton({
       }
     } catch (err) {
       // Error already handled by hooks (toast shown)
-      console.error("Approval failed:", err);
+      logger.error(err, "Approval failed");
     }
   };
 

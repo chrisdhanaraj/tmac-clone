@@ -11,6 +11,7 @@ import { UserApprovalTable } from "../components/user-approval-table";
 import { useUsersQuery } from "../hooks/use-users-query";
 import { useBulkApproval } from "../hooks/use-bulk-approval";
 import { useSearchParams } from "react-router";
+import { logger } from "@tmac/shared/logger";
 
 /**
  * Loader: Fetch paginated user data with authentication
@@ -132,7 +133,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       totalCount,
     };
   } catch (error) {
-    console.error("Error loading user data:", error);
+    logger.error(error, "Error loading user data");
     throw new Response("Internal Server Error", { status: 500 });
   }
 }
@@ -169,7 +170,7 @@ export default function UsersManagement() {
   // Helper function to update URL parameters
   const updateSearchParams = (updates: Record<string, string | number>) => {
     setSearchParams(
-      prev => {
+      (prev) => {
         const newParams = new URLSearchParams(prev);
 
         Object.entries(updates).forEach(([key, value]) => {
@@ -236,8 +237,8 @@ export default function UsersManagement() {
   // Handle single user update after approval (row-specific refresh)
   const handleUserUpdate = useCallback(
     (userId: string, userData: UserDisplay) => {
-      setUsers(prev =>
-        prev.map(user => (user.id === userId ? userData : user))
+      setUsers((prev) =>
+        prev.map((user) => (user.id === userId ? userData : user))
       );
     },
     []

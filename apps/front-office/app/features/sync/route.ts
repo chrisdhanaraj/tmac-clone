@@ -1,4 +1,5 @@
 import type { LoaderFunctionArgs } from "react-router";
+import { logger } from "@tmac/shared/logger";
 
 import { syncIntakeFromGoogleSheet } from "./sync";
 
@@ -8,7 +9,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const expectedSecret = process.env.SYNC_SECRET;
 
   if (!expectedSecret) {
-    console.error("SYNC_SECRET env var is not configured");
+    logger.error("SYNC_SECRET env var is not configured");
     return Response.json(
       {
         success: false,
@@ -21,7 +22,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const providedSecret = request.headers.get(SYNC_SECRET_HEADER);
 
   if (!providedSecret || providedSecret !== expectedSecret) {
-    console.warn("Unauthorized sync attempt");
+    logger.warn("Unauthorized sync attempt");
     return Response.json(
       {
         success: false,
@@ -35,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const result = await syncIntakeFromGoogleSheet();
     return Response.json({ success: true, result }, { status: 200 });
   } catch (error) {
-    console.error("Failed to sync intake form", error);
+    logger.error(error, "Failed to sync intake form");
     return Response.json(
       {
         success: false,

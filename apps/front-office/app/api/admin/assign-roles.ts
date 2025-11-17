@@ -1,5 +1,6 @@
 import type { LoaderFunctionArgs } from "react-router";
 import prisma from "~/config/prisma";
+import { logger } from "@tmac/shared/logger";
 
 /**
  * GET /api/admin/assign-roles?emails=email1@example.com,email2@example.com
@@ -31,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     const emails = emailsParam
       .split(",")
-      .map(email => email.trim())
+      .map((email) => email.trim())
       .filter(Boolean);
 
     if (emails.length === 0) {
@@ -70,7 +71,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
         // Check if user already has admin role
         const hasAdminRole = user.roles.some(
-          userRole => userRole.roleId === adminRole.id
+          (userRole) => userRole.roleId === adminRole.id
         );
 
         if (hasAdminRole) {
@@ -104,8 +105,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       }
     }
 
-    const successCount = results.filter(r => r.success).length;
-    const failureCount = results.filter(r => !r.success).length;
+    const successCount = results.filter((r) => r.success).length;
+    const failureCount = results.filter((r) => !r.success).length;
 
     return new Response(
       JSON.stringify({
@@ -117,7 +118,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error assigning admin roles:", error);
+    logger.error(error, "Error assigning admin roles");
 
     return new Response(
       JSON.stringify({

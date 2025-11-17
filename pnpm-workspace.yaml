@@ -1,3 +1,5 @@
 packages:
   # All apps 
   - 'apps/*'
+  # Shared packages
+  - 'packages/*'

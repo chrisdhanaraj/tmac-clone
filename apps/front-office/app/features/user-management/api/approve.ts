@@ -3,6 +3,7 @@ import { auth } from "~/features/auth/api/auth.server";
 import prisma from "~/config/prisma";
 import { LoopsClient } from "loops";
 import { UserApprovalSchema } from "~/features/user-management/validation/user-approval.schema";
+import { logger } from "@tmac/shared/logger";
 
 /**
  * POST /api/users/approve - User approval (single or bulk)
@@ -107,7 +108,10 @@ export async function action({ request }: ActionFunctionArgs) {
           emailSent = response.success;
         }
       } catch (emailError) {
-        console.error(`Failed to send email for user ${user.id}:`, emailError);
+        logger.error(
+          emailError,
+          `Failed to send email for user ${user.id}`
+        );
       }
 
       emailResults.push({
@@ -119,9 +123,9 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Handle users that weren't found
-    const foundUserIds = updatedUsers.map(u => u.id);
+    const foundUserIds = updatedUsers.map((u) => u.id);
     const notFoundUserIds = validatedData.userIds.filter(
-      id => !foundUserIds.includes(id)
+      (id) => !foundUserIds.includes(id)
     );
 
     for (const userId of notFoundUserIds) {
@@ -151,7 +155,7 @@ export async function action({ request }: ActionFunctionArgs) {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error in bulk approval:", error);
+    logger.error(error, "Error in bulk approval");
 
     if (error instanceof Error && error.message.includes("validation")) {
       return new Response(

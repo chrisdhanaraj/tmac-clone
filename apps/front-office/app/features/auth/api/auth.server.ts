@@ -5,6 +5,7 @@ import { organization, magicLink } from "better-auth/plugins";
 import { createAccessControl } from "better-auth/plugins/access";
 import { config } from "~/config/env";
 import { loops } from "../email/loopsClient.server";
+import { logger } from "@tmac/shared/logger";
 
 // Define access control statements for events, users, and roles resources
 const statement = {
@@ -60,7 +61,7 @@ export const auth = betterAuth({
           const transactionalId = process.env.LOOPS_MAGIC_EMAIL;
 
           if (!transactionalId) {
-            console.error(
+            logger.error(
               "LOOPS_MAGIC_EMAIL environment variable is not configured"
             );
             throw new Error("Email service configuration error");
@@ -68,10 +69,10 @@ export const auth = betterAuth({
 
           // Validate email template data
           if (!email || !url) {
-            console.error("Missing required email data:", {
-              email: !!email,
-              url: !!url,
-            });
+            logger.error(
+              { email: !!email, url: !!url },
+              "Missing required email data"
+            );
             throw new Error("Invalid email parameters");
           }
 
@@ -85,16 +86,18 @@ export const auth = betterAuth({
           });
 
           // Log successful email send (without sensitive data)
-          console.log(
+          logger.info(
             `Magic link email sent successfully to ${email.replace(/(.{2}).*(@.*)/, "$1***$2")}`
           );
         } catch (error) {
           // Enhanced error logging
-          console.error("Magic link email delivery failed:", {
-            error: error instanceof Error ? error.message : "Unknown error",
-            email: email?.replace(/(.{2}).*(@.*)/, "$1***$2") || "unknown",
-            timestamp: new Date().toISOString(),
-          });
+          logger.error(
+            {
+              error: error instanceof Error ? error.message : "Unknown error",
+              email: email?.replace(/(.{2}).*(@.*)/, "$1***$2") || "unknown",
+            },
+            "Magic link email delivery failed"
+          );
 
           // Re-throw error to be handled by BetterAuth
           throw new Error("Failed to send magic link email. Please try again.");
