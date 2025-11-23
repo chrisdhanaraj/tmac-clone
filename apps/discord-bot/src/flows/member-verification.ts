@@ -11,6 +11,11 @@ const pendingVerifications = new Map<
   { userId: string; guildId: string; awaitingEmail: boolean }
 >();
 
+export function isPendingVerification(userId: string): boolean {
+  const verification = pendingVerifications.get(userId);
+  return !!verification && verification.awaitingEmail;
+}
+
 export function addPendingVerification(userId: string, guildId: string) {
   pendingVerifications.set(userId, {
     userId,

@@ -1,6 +1,15 @@
 import pino from "pino";
 
-const isDevelopment = process.env.NODE_ENV === "development";
+// Safely access process.env
+const getEnv = (key: string) => {
+  try {
+    return process.env[key];
+  } catch {
+    return undefined;
+  }
+};
+
+const isDevelopment = getEnv("NODE_ENV") === "development";
 
 // Browser transport for client-side logging
 const browserTransport = {
@@ -28,7 +37,7 @@ const serverTransport = isDevelopment
 const isBrowser = typeof (globalThis as any).window !== "undefined";
 
 export const logger = pino({
-  level: process.env.LOG_LEVEL || "info",
+  level: getEnv("LOG_LEVEL") || "info",
   transport: isBrowser ? undefined : serverTransport,
   browser: {
     asObject: true, // Log as objects in browser console for better readability

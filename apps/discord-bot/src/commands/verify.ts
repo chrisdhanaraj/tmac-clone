@@ -2,8 +2,12 @@ import {
   ChatInputCommandInteraction,
   SlashCommandBuilder,
   EmbedBuilder,
+  GuildMember,
 } from "discord.js";
-import { addPendingVerification } from "../flows/member-verification.js";
+import {
+  addPendingVerification,
+  isPendingVerification,
+} from "../flows/member-verification.js";
 import { logger } from "@tmac/shared/logger";
 
 export const data = new SlashCommandBuilder()
@@ -12,6 +16,36 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   try {
+    // Check if already verified (has Community Member role)
+    if (interaction.member && interaction.guild) {
+      const member =
+        interaction.member instanceof GuildMember
+          ? interaction.member
+          : await interaction.guild.members.fetch(interaction.user.id);
+
+      const hasRole = member.roles.cache.some(
+        (r) => r.name === "Community Member",
+      );
+
+      if (hasRole) {
+        await interaction.reply({
+          content: "You are already a verified Community Member!",
+          ephemeral: true,
+        });
+        return;
+      }
+    }
+
+    // Check if already pending
+    if (isPendingVerification(interaction.user.id)) {
+      await interaction.reply({
+        content:
+          "You already have a verification in progress. Please check your DMs for instructions, or reply to the DM with your email.",
+        ephemeral: true,
+      });
+      return;
+    }
+
     // Send a DM to the user
     const embed = new EmbedBuilder()
       .setColor(0x0099ff)
