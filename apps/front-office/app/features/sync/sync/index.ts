@@ -69,9 +69,24 @@ export async function syncIntakeFromGoogleSheet(
 
   logger.info(`   • ${validRawRows.length} rows passed raw validation`);
 
-  const processedData: ProcessedUserData[] = validRawRows.map(row =>
-    processIntakeFormRow(row)
-  );
+  const processedData: ProcessedUserData[] = [];
+
+  for (const row of validRawRows) {
+    try {
+      const processed = processIntakeFormRow(row);
+      processedData.push(processed);
+    } catch (error) {
+      const reason =
+        error instanceof Error ? error.message : "Unknown processing error";
+      const email = row.email || row.emailAddress || null;
+
+      skippedRows.push({
+        email,
+        reason,
+      });
+      logger.warn(`⚠️ Skipping raw row ${email || "unknown email"}: ${reason}`);
+    }
+  }
 
   const finalValidData = processedData.filter(data => {
     const validation = validateProcessedData(data);

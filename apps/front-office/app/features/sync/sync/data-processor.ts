@@ -32,7 +32,7 @@ export function processIntakeFormRow(row: IntakeFormRow): ProcessedUserData {
   const email = primaryEmail || secondaryEmail;
 
   if (!email) {
-    processingNotes.push("No valid email found");
+    throw new Error("No valid email found");
   }
 
   const phone = cleanPhone(row.phone);
@@ -90,7 +90,7 @@ export function processIntakeFormRow(row: IntakeFormRow): ProcessedUserData {
     // User fields (moved from tennisProfile)
     firstName,
     lastName,
-    email: email ?? "",
+    email,
     phone,
     emailVerified: false, // Default to false for imported users
     approved: parseBoolean(row.approved),
