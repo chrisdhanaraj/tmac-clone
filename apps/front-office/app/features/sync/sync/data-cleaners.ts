@@ -45,10 +45,7 @@ export function cleanInstagramHandle(instagram: string): string | null {
   let cleaned = instagram.trim();
 
   // Remove common prefixes
-  cleaned = cleaned.replace(
-    /^(https?:\/\/)?(www\.)?(instagram\.com\/)?@?/,
-    ""
-  );
+  cleaned = cleaned.replace(/^(https?:\/\/)?(www\.)?(instagram\.com\/)?@?/, "");
 
   // Remove trailing slashes or other characters
   cleaned = cleaned.replace(/[/\s]*$/, "");

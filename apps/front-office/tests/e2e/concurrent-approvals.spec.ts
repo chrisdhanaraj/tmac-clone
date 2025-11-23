@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page, type Route } from "@playwright/test";
 
 test.describe("User Approval - Concurrent Operations", () => {
   test.beforeEach(async ({ page }) => {
@@ -84,8 +84,8 @@ test.describe("User Approval - Concurrent Operations", () => {
     let approvalCount = 0;
 
     // Mock API for both contexts - same user ID will be approved
-    const setupMock = async (page: any) => {
-      await page.route("**/api/users/approve", async (route: any) => {
+    const setupMock = async (page: Page) => {
+      await page.route("**/api/users/approve", async (route: Route) => {
         approvalCount++;
         const request = route.request();
         const postData = request.postDataJSON();

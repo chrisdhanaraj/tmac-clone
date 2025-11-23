@@ -72,10 +72,7 @@ export async function action({ request }: Route.ActionArgs) {
 
       if (!webhookResponse.ok) {
         const errorText = await webhookResponse.text();
-        logger.error(
-          { errorText },
-          "Failed to send webhook to Discord bot"
-        );
+        logger.error({ errorText }, "Failed to send webhook to Discord bot");
         // Don't fail the verification if webhook fails
       }
     } catch (webhookError) {

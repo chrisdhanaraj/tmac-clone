@@ -45,7 +45,8 @@ export default function VerifyDiscord() {
         } else {
           setStatus("error");
           setMessage(
-            data.message || "An error occurred during verification. Please try again."
+            data.message ||
+              "An error occurred during verification. Please try again."
           );
         }
       } catch (error) {

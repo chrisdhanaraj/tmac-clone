@@ -50,7 +50,7 @@ export async function syncIntakeFromGoogleSheet(
 
   const skippedRows: { email: string | null; reason: string }[] = [];
 
-  const validRawRows = rawRows.filter((row) => {
+  const validRawRows = rawRows.filter(row => {
     const validation = validateRequiredFields(row);
     if (!validation.isValid) {
       skippedRows.push({
@@ -69,11 +69,11 @@ export async function syncIntakeFromGoogleSheet(
 
   logger.info(`   • ${validRawRows.length} rows passed raw validation`);
 
-  const processedData: ProcessedUserData[] = validRawRows.map((row) =>
+  const processedData: ProcessedUserData[] = validRawRows.map(row =>
     processIntakeFormRow(row)
   );
 
-  const finalValidData = processedData.filter((data) => {
+  const finalValidData = processedData.filter(data => {
     const validation = validateProcessedData(data);
     if (!validation.isValid) {
       skippedRows.push({

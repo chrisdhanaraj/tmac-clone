@@ -108,10 +108,7 @@ export async function action({ request }: ActionFunctionArgs) {
           emailSent = response.success;
         }
       } catch (emailError) {
-        logger.error(
-          emailError,
-          `Failed to send email for user ${user.id}`
-        );
+        logger.error(emailError, `Failed to send email for user ${user.id}`);
       }
 
       emailResults.push({
@@ -123,9 +120,9 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Handle users that weren't found
-    const foundUserIds = updatedUsers.map((u) => u.id);
+    const foundUserIds = updatedUsers.map(u => u.id);
     const notFoundUserIds = validatedData.userIds.filter(
-      (id) => !foundUserIds.includes(id)
+      id => !foundUserIds.includes(id)
     );
 
     for (const userId of notFoundUserIds) {

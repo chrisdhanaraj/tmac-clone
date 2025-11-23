@@ -170,7 +170,7 @@ export default function UsersManagement() {
   // Helper function to update URL parameters
   const updateSearchParams = (updates: Record<string, string | number>) => {
     setSearchParams(
-      (prev) => {
+      prev => {
         const newParams = new URLSearchParams(prev);
 
         Object.entries(updates).forEach(([key, value]) => {
@@ -237,8 +237,8 @@ export default function UsersManagement() {
   // Handle single user update after approval (row-specific refresh)
   const handleUserUpdate = useCallback(
     (userId: string, userData: UserDisplay) => {
-      setUsers((prev) =>
-        prev.map((user) => (user.id === userId ? userData : user))
+      setUsers(prev =>
+        prev.map(user => (user.id === userId ? userData : user))
       );
     },
     []

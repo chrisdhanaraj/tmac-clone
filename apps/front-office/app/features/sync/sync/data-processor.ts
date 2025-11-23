@@ -90,7 +90,7 @@ export function processIntakeFormRow(row: IntakeFormRow): ProcessedUserData {
     // User fields (moved from tennisProfile)
     firstName,
     lastName,
-    email: email!,
+    email: email ?? "",
     phone,
     emailVerified: false, // Default to false for imported users
     approved: parseBoolean(row.approved),

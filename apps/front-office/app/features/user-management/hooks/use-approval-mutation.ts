@@ -49,7 +49,9 @@ export function useApprovalMutation(userId: string) {
       const data = await response.json();
 
       // Extract the user data for this userId from results
-      const result = data.results?.find((r: any) => r.userId === userId);
+      const result = data.results?.find(
+        (r: { userId: string; user: unknown }) => r.userId === userId
+      );
       const userData = result?.user as UserDisplay | undefined;
 
       // Success - clear error state

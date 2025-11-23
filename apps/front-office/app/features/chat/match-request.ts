@@ -31,7 +31,7 @@ export async function createMatchRequest(request: Request) {
         createdAt: new Date(),
         channelId,
       };
-      
+
       return new Response(JSON.stringify(matchRequest), {
         status: 200,
         headers: { "Content-Type": "application/json" },

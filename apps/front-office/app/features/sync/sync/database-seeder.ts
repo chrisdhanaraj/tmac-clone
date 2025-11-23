@@ -1,6 +1,15 @@
 import prisma from "~/config/prisma";
 import type { ProcessedUserData } from "./types";
 import { logger } from "@tmac/shared/logger";
+import {
+  Gender,
+  AgeRange,
+  Ethnicity,
+  District,
+  TmacGearPreference,
+  GearSize,
+  TennisRanking,
+} from "~/generated/prisma/client";
 
 export class DatabaseSeeder {
   async seedUsers(processedData: ProcessedUserData[]): Promise<{
@@ -61,7 +70,7 @@ export class DatabaseSeeder {
     this.validateDataLengths(userData);
 
     // Update or create user and tennis profile in a transaction
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async tx => {
       try {
         if (existingUser) {
           // Update existing user
@@ -71,8 +80,8 @@ export class DatabaseSeeder {
               name: `${userData.firstName || ""} ${
                 userData.lastName || ""
               }`.trim(),
-              firstName: userData.firstName!,
-              lastName: userData.lastName!,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
               phone: userData.phone,
               emailVerified: userData.emailVerified,
               approved: userData.approved,
@@ -85,20 +94,22 @@ export class DatabaseSeeder {
             await tx.tennisProfile.update({
               where: { userId: existingUser.id },
               data: {
-                gender: userData.gender as any,
-                ageRange: userData.ageRange as any,
-                ethnicity: userData.ethnicity as any,
+                gender: userData.gender as unknown as Gender,
+                ageRange: userData.ageRange as unknown as AgeRange,
+                ethnicity: userData.ethnicity as unknown as Ethnicity,
                 birthDate: userData.birthDate,
                 instagramHandle: userData.instagramHandle,
-                district: userData.district as any,
+                district: userData.district as unknown as District,
                 districtOther: userData.districtOther,
-                tmacGearPreference: userData.tmacGearPreference as any,
+                tmacGearPreference:
+                  userData.tmacGearPreference as unknown as TmacGearPreference,
                 tmacGearOther: userData.tmacGearOther,
-                gearSize: userData.gearSize as any,
+                gearSize: userData.gearSize as unknown as GearSize,
                 playlistSong: userData.playlistSong,
                 whyJoinTmac: userData.whyJoinTmac,
                 referredBy: userData.referredBy,
-                tennisRanking: userData.tennisRanking as any,
+                tennisRanking:
+                  userData.tennisRanking as unknown as TennisRanking,
                 favoriteTennisPlayer: userData.favoriteTennisPlayer,
               },
             });
@@ -106,20 +117,22 @@ export class DatabaseSeeder {
             await tx.tennisProfile.create({
               data: {
                 userId: existingUser.id,
-                gender: userData.gender as any,
-                ageRange: userData.ageRange as any,
-                ethnicity: userData.ethnicity as any,
+                gender: userData.gender as unknown as Gender,
+                ageRange: userData.ageRange as unknown as AgeRange,
+                ethnicity: userData.ethnicity as unknown as Ethnicity,
                 birthDate: userData.birthDate,
                 instagramHandle: userData.instagramHandle,
-                district: userData.district as any,
+                district: userData.district as unknown as District,
                 districtOther: userData.districtOther,
-                tmacGearPreference: userData.tmacGearPreference as any,
+                tmacGearPreference:
+                  userData.tmacGearPreference as unknown as TmacGearPreference,
                 tmacGearOther: userData.tmacGearOther,
-                gearSize: userData.gearSize as any,
+                gearSize: userData.gearSize as unknown as GearSize,
                 playlistSong: userData.playlistSong,
                 whyJoinTmac: userData.whyJoinTmac,
                 referredBy: userData.referredBy,
-                tennisRanking: userData.tennisRanking as any,
+                tennisRanking:
+                  userData.tennisRanking as unknown as TennisRanking,
                 favoriteTennisPlayer: userData.favoriteTennisPlayer,
               },
             });
@@ -131,8 +144,8 @@ export class DatabaseSeeder {
               name: `${userData.firstName || ""} ${
                 userData.lastName || ""
               }`.trim(),
-              firstName: userData.firstName!,
-              lastName: userData.lastName!,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
               email: userData.email,
               phone: userData.phone,
               emailVerified: userData.emailVerified,
@@ -145,20 +158,21 @@ export class DatabaseSeeder {
           await tx.tennisProfile.create({
             data: {
               userId: user.id,
-              gender: userData.gender as any,
-              ageRange: userData.ageRange as any,
-              ethnicity: userData.ethnicity as any,
+              gender: userData.gender as unknown as Gender,
+              ageRange: userData.ageRange as unknown as AgeRange,
+              ethnicity: userData.ethnicity as unknown as Ethnicity,
               birthDate: userData.birthDate,
               instagramHandle: userData.instagramHandle,
-              district: userData.district as any,
+              district: userData.district as unknown as District,
               districtOther: userData.districtOther,
-              tmacGearPreference: userData.tmacGearPreference as any,
+              tmacGearPreference:
+                userData.tmacGearPreference as unknown as TmacGearPreference,
               tmacGearOther: userData.tmacGearOther,
-              gearSize: userData.gearSize as any,
+              gearSize: userData.gearSize as unknown as GearSize,
               playlistSong: userData.playlistSong,
               whyJoinTmac: userData.whyJoinTmac,
               referredBy: userData.referredBy,
-              tennisRanking: userData.tennisRanking as any,
+              tennisRanking: userData.tennisRanking as unknown as TennisRanking,
               favoriteTennisPlayer: userData.favoriteTennisPlayer,
             },
           });
@@ -209,9 +223,11 @@ export class DatabaseSeeder {
     }
   }
 
-  private logDetailedError(error: any, userData: ProcessedUserData): void {
+  private logDetailedError(error: unknown, userData: ProcessedUserData): void {
     logger.error(`\n🚨 Detailed error for user: ${userData.email}`);
-    logger.error(`Error message: ${error.message}`);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    logger.error(`Error message: ${errorMessage}`);
 
     // Log all field lengths for debugging
     logger.error(`\n📏 Field lengths:`);
@@ -267,7 +283,7 @@ export class DatabaseSeeder {
       },
     });
 
-    return existingUsers.map((user) => user.email);
+    return existingUsers.map(user => user.email);
   }
 
   async getStats(): Promise<{

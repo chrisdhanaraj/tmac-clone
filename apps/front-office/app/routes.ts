@@ -7,7 +7,10 @@ export default [
     route("users", "features/user-management/routes/users.tsx"),
   ]),
   route("user", "features/user/user.tsx"),
-  route("verify-discord", "features/discord-verification/routes/verify-discord.tsx"),
+  route(
+    "verify-discord",
+    "features/discord-verification/routes/verify-discord.tsx"
+  ),
   route("api/auth/*", "features/auth/routes/auth.ts"),
   route("api/chat/welcome", "features/chat/routes/welcome.ts"),
   route("api/chat/match-request", "features/chat/routes/match-request.ts"),
