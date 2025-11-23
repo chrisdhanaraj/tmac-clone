@@ -32,7 +32,7 @@ export async function handleMemberJoin(member: GuildMember) {
       .setTitle("Welcome to the TMAC Community!")
       .setDescription(
         "To verify your membership, please reply with your email address.\n\n" +
-          "We'll send you a verification link to confirm your membership status."
+          "We'll send you a verification link to confirm your membership status.",
       )
       .setFooter({ text: "Please reply with your email address" });
 
@@ -72,7 +72,7 @@ export async function handleDirectMessage(message: Message, _client: Client) {
 
   if (!emailRegex.test(email)) {
     await message.reply(
-      "That doesn't look like a valid email address. Please try again."
+      "That doesn't look like a valid email address. Please try again.",
     );
     return;
   }
@@ -100,7 +100,7 @@ export async function handleDirectMessage(message: Message, _client: Client) {
       .setTitle("Verification Email Sent!")
       .setDescription(
         `We've sent a verification link to **${email}**\n\n` +
-          "Please check your email and click the verification button to complete your membership verification."
+          "Please check your email and click the verification button to complete your membership verification.",
       );
 
     await message.reply({ embeds: [successEmbed] });
@@ -109,23 +109,23 @@ export async function handleDirectMessage(message: Message, _client: Client) {
     pendingVerifications.delete(message.author.id);
 
     logger.info(
-      `Sent verification email to ${email} for user ${message.author.tag}`
+      `Sent verification email to ${email} for user ${message.author.tag}`,
     );
   } catch (error) {
     logger.error(error, "Error sending verification email");
     await message.reply(
-      "Sorry, there was an error processing your request. Please try again or contact an administrator."
+      "Sorry, there was an error processing your request. Please try again or contact an administrator.",
     );
   }
 }
 
 export async function handleVerificationComplete(
   discordId: string,
-  client: Client
+  client: Client,
 ) {
   try {
     // Find the guild and member
-    const guild = client.guilds.cache.get(env.guildId!);
+    const guild = client.guilds.cache.get(env.guildId);
     if (!guild) {
       logger.error("Guild not found");
       return;
@@ -157,7 +157,7 @@ export async function handleVerificationComplete(
       .setColor(0x00ff00)
       .setTitle("Verification Complete!")
       .setDescription(
-        "Your membership has been verified! You now have access to the community."
+        "Your membership has been verified! You now have access to the community.",
       );
 
     try {
@@ -168,7 +168,7 @@ export async function handleVerificationComplete(
     }
 
     logger.info(
-      `Successfully verified and added Community Member role to ${member.user.tag}`
+      `Successfully verified and added Community Member role to ${member.user.tag}`,
     );
   } catch (error) {
     logger.error(error, "Error completing verification");

@@ -18,7 +18,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       .setTitle("Welcome to the TMAC Community!")
       .setDescription(
         "To verify your membership, please reply with your email address.\n\n" +
-          "We'll send you a verification link to confirm your membership status."
+          "We'll send you a verification link to confirm your membership status.",
       )
       .setFooter({ text: "Please reply with your email address" });
 
@@ -27,10 +27,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       await dmChannel.send({ embeds: [embed] });
 
       // Mark as awaiting email
-      addPendingVerification(
-        interaction.user.id,
-        interaction.guildId || ""
-      );
+      addPendingVerification(interaction.user.id, interaction.guildId || "");
 
       // Respond to the interaction
       await interaction.reply({
@@ -39,7 +36,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       });
 
       logger.info(
-        `Verification flow started for ${interaction.user.tag} (${interaction.user.id})`
+        `Verification flow started for ${interaction.user.tag} (${interaction.user.id})`,
       );
     } catch (error) {
       logger.error(error, `Failed to send DM to ${interaction.user.tag}`);

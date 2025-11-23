@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
     option
       .setName("location")
       .setDescription("Where you want to play")
-      .setRequired(true)
+      .setRequired(true),
   );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -45,19 +45,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         status: response.status,
         headers: Object.fromEntries(response.headers.entries()),
       },
-      "Match request response"
+      "Match request response",
     );
 
     if (!response.ok) {
       const errorText = await response.text();
       logger.error({ errorText }, "Error response body");
       throw new Error(
-        `Front-office API error: ${response.status} - ${errorText}`
+        `Front-office API error: ${response.status} - ${errorText}`,
       );
     }
 
     const matchRequest = MatchRequestResponseSchema.parse(
-      await response.json()
+      await response.json(),
     );
     const playerId = interaction.user.id;
 

@@ -73,18 +73,21 @@ DISCORD_WEBHOOK_SECRET="dev-secret-123"
 ### 3. Running Locally
 
 1. **Install dependencies**:
+
    ```bash
    pnpm install
    ```
 
 2. **Register Slash Commands**:
    This registers the commands (like `/verify`) with your dev guild.
+
    ```bash
    cd apps/discord-bot
    pnpm register:commands
    ```
 
 3. **Start the Bot**:
+
    ```bash
    pnpm dev
    ```
@@ -110,4 +113,3 @@ DISCORD_WEBHOOK_SECRET="dev-secret-123"
 ## Deployment
 
 The production bot is deployed separately. Ensure environment variables in the deployment environment match the production Discord Application credentials.
-

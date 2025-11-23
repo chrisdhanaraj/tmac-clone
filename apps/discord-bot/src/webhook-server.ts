@@ -51,7 +51,7 @@ export function startWebhookServer(client: Client) {
   });
 
   logger.info(
-    `🔗 Webhook server listening on port ${server.port} at http://localhost:${server.port}`
+    `🔗 Webhook server listening on port ${server.port} at http://localhost:${server.port}`,
   );
 
   return server;

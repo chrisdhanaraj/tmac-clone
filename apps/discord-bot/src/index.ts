@@ -7,12 +7,18 @@ import {
 
 import { env } from "./env.js";
 import { data as pingData, execute as pingExecute } from "./commands/ping.js";
-import { data as matchData, execute as matchExecute } from "./commands/match.js";
+import {
+  data as matchData,
+  execute as matchExecute,
+} from "./commands/match.js";
 import {
   data as welcomeData,
   execute as welcomeExecute,
 } from "./commands/welcome.js";
-import { data as verifyData, execute as verifyExecute } from "./commands/verify.js";
+import {
+  data as verifyData,
+  execute as verifyExecute,
+} from "./commands/verify.js";
 import {
   handleMemberJoin,
   handleDirectMessage,
@@ -21,7 +27,7 @@ import { startWebhookServer } from "./webhook-server.js";
 import { logger } from "@tmac/shared/logger";
 
 type ChatInputCommandHandler = (
-  interaction: ChatInputCommandInteraction
+  interaction: ChatInputCommandInteraction,
 ) => Promise<void>;
 
 const client = new Client({

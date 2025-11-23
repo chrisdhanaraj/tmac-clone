@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
     option
       .setName("player")
       .setDescription("Player to welcome")
-      .setRequired(true)
+      .setRequired(true),
   );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
@@ -25,7 +25,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   try {
     logger.info(
       { user: interaction.options.getUser("player", true) },
-      "Welcome command invoked"
+      "Welcome command invoked",
     );
     const payload: WelcomeRequestPayload = {
       discordUserId: targetUser.id,

@@ -17,7 +17,7 @@ export const env = {
   frontOfficeUrl: requiredEnv("FRONT_OFFICE_URL"),
   loopsApiKey: requiredEnv("LOOPS_API_KEY"),
   loopsTransactionalEmailTemplateId: requiredEnv(
-    "LOOPS_TRANSACTIONAL_EMAIL_TEMPLATE_ID"
+    "LOOPS_TRANSACTIONAL_EMAIL_TEMPLATE_ID",
   ),
   webhookSecret: requiredEnv("DISCORD_WEBHOOK_SECRET"),
   port: parseInt(requiredEnv("PORT"), 10),

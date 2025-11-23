@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lint-and-type-check:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -48,19 +48,18 @@ jobs:
       - name: Check Prettier formatting
         run: |
           cd apps/front-office && pnpm format:check
-          cd ../chat-listener && pnpm format:check
+          cd ../discord-bot && pnpm format:check
 
       - name: Run ESLint
         run: |
           cd apps/front-office && pnpm lint:check
-          cd ../chat-listener && pnpm lint:check
+          cd ../discord-bot && pnpm lint:check
 
       - name: Type check TypeScript
         run: |
           cd apps/front-office && pnpm typecheck
-          cd ../chat-listener && pnpm typecheck
+          cd ../discord-bot && pnpm typecheck
 
       - name: Build projects
         run: |
           cd apps/front-office && pnpm build
-          cd ../chat-listener && pnpm build
