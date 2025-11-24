@@ -12,8 +12,11 @@ export default [
     "features/discord-verification/routes/verify-discord.tsx"
   ),
   route("api/auth/*", "features/auth/routes/auth.ts"),
-  route("api/chat/welcome", "features/chat/routes/welcome.ts"),
-  route("api/chat/match-request", "features/chat/routes/match-request.ts"),
+  route("api/discord/welcome", "features/discord/routes/welcome.ts"),
+  route(
+    "api/discord/match-request",
+    "features/discord/routes/match-request.ts"
+  ),
   route("api/users/approve", "features/user-management/api/approve.ts"),
   route("api/users/:userId", "features/user-management/api/get-user.ts"),
   route("api/users", "features/user-management/api/index.ts"),
