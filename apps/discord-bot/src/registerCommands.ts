@@ -15,21 +15,27 @@ async function registerCommands() {
   try {
     logger.info("Started refreshing application (/) commands.");
 
-    // 1. Register commands globally (for DMs)
-    await rest.put(Routes.applicationCommands(env.applicationId), {
-      body: commands,
-    });
-    logger.info("Successfully reloaded global application (/) commands.");
-
-    // 2. If guildId is present, also register to that guild for instant updates during dev
+    // If guildId is present, register to that guild and clear global commands to prevent duplicates
     if (env.guildId) {
       await rest.put(
         Routes.applicationGuildCommands(env.applicationId, env.guildId),
         { body: commands },
       );
+
+      // Clear global commands
+      await rest.put(Routes.applicationCommands(env.applicationId), {
+        body: [],
+      });
+
       logger.info(
-        `Successfully reloaded guild application (/) commands for guild ${env.guildId}.`,
+        `Successfully reloaded guild application (/) commands for guild ${env.guildId}. Global commands cleared.`,
       );
+    } else {
+      // Register commands globally (for DMs)
+      await rest.put(Routes.applicationCommands(env.applicationId), {
+        body: commands,
+      });
+      logger.info("Successfully reloaded global application (/) commands.");
     }
   } catch (error) {
     logger.error(error, "Failed to register commands");
