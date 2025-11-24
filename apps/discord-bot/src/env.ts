@@ -13,7 +13,7 @@ function requiredEnv(key: string): string {
 export const env = {
   token: requiredEnv("DISCORD_TOKEN"),
   applicationId: requiredEnv("DISCORD_APPLICATION_ID"),
-  guildId: requiredEnv("DISCORD_GUILD_ID"),
+  guildId: process.env["DISCORD_GUILD_ID"],
   frontOfficeUrl: requiredEnv("FRONT_OFFICE_URL"),
   loopsApiKey: requiredEnv("LOOPS_API_KEY"),
   loopsTransactionalEmailTemplateId: requiredEnv(

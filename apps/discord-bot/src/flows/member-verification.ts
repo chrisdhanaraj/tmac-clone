@@ -129,6 +129,11 @@ export async function handleVerificationComplete(
   client: Client,
 ) {
   try {
+    if (!env.guildId) {
+      logger.error("DISCORD_GUILD_ID not configured");
+      return;
+    }
+
     // Find the guild and member
     const guild = client.guilds.cache.get(env.guildId);
     if (!guild) {

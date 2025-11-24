@@ -17,6 +17,7 @@ export default [
     "api/discord/match-request",
     "features/discord/routes/match-request.ts"
   ),
+  route("api/discord/ranking", "features/discord/routes/update-ranking.ts"),
   route("api/users/approve", "features/user-management/api/approve.ts"),
   route("api/users/:userId", "features/user-management/api/get-user.ts"),
   route("api/users", "features/user-management/api/index.ts"),

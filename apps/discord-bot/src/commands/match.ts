@@ -62,17 +62,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     .setRequired(false);
 
   const firstActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(
-    dateInput
+    dateInput,
   );
   const secondActionRow =
     new ActionRowBuilder<TextInputBuilder>().addComponents(timeInput);
   const thirdActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(
-    courtInput
+    courtInput,
   );
   const fourthActionRow =
     new ActionRowBuilder<TextInputBuilder>().addComponents(levelInput);
   const fifthActionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(
-    notesInput
+    notesInput,
   );
 
   modal.addComponents(
@@ -80,7 +80,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     secondActionRow,
     thirdActionRow,
     fourthActionRow,
-    fifthActionRow
+    fifthActionRow,
   );
 
   await interaction.showModal(modal);
@@ -123,12 +123,12 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
       const errorText = await response.text();
       logger.error({ errorText }, "Error response body");
       throw new Error(
-        `Front-office API error: ${response.status} - ${errorText}`
+        `Front-office API error: ${response.status} - ${errorText}`,
       );
     }
 
     const matchRequest = MatchRequestResponseSchema.parse(
-      await response.json()
+      await response.json(),
     );
     const playerId = interaction.user.id;
 
@@ -154,7 +154,7 @@ export async function handleModal(interaction: ModalSubmitInteraction) {
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       joinButton,
-      scheduleButton
+      scheduleButton,
     );
 
     await interaction.editReply({ content: message, components: [row] });
