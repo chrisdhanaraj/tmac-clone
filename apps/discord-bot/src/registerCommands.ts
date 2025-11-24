@@ -2,19 +2,12 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord.js";
 
 import { env } from "./env.js";
-import { data as pingCommand } from "./commands/ping.js";
 import { data as matchCommand } from "./commands/match.js";
-import { data as welcomeCommand } from "./commands/welcome.js";
-import { data as verifyCommand } from "./commands/verify.js";
 import { logger } from "@tmac/shared/logger";
 
-const commands = [
-  pingCommand.toJSON(),
-  matchCommand.toJSON(),
-  welcomeCommand.toJSON(),
-  verifyCommand.toJSON(),
-];
+const commands = [matchCommand.toJSON()];
 
+// this is the HTTP client abstraction for the Discord API
 const rest = new REST({ version: "10" }).setToken(env.token);
 
 async function registerCommands() {
