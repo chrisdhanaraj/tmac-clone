@@ -53,13 +53,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
       new StringSelectMenuOptionBuilder().setLabel("5.5").setValue("FIVE_FIVE"),
       new StringSelectMenuOptionBuilder().setLabel("6.0").setValue("SIX_ZERO"),
       new StringSelectMenuOptionBuilder().setLabel("6.5").setValue("SIX_FIVE"),
-      new StringSelectMenuOptionBuilder()
-        .setLabel("7.0")
-        .setValue("SEVEN_ZERO"),
+      new StringSelectMenuOptionBuilder().setLabel("7.0").setValue("SEVEN_ZERO")
     );
 
   const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-    select,
+    select
   );
 
   await interaction.reply({

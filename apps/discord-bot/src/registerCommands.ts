@@ -24,21 +24,21 @@ async function registerCommands() {
       body: globalCommands,
     });
     logger.info(
-      `Successfully registered ${globalCommands.length} global command(s).`,
+      `Successfully registered ${globalCommands.length} global command(s).`
     );
 
     // Register guild-only commands if guildId is present
     if (env.guildId) {
       await rest.put(
         Routes.applicationGuildCommands(env.applicationId, env.guildId),
-        { body: guildCommands },
+        { body: guildCommands }
       );
       logger.info(
-        `Successfully registered ${guildCommands.length} guild command(s) for guild ${env.guildId}.`,
+        `Successfully registered ${guildCommands.length} guild command(s) for guild ${env.guildId}.`
       );
     } else {
       logger.warn(
-        "No DISCORD_GUILD_ID set - guild-only commands will not be registered.",
+        "No DISCORD_GUILD_ID set - guild-only commands will not be registered."
       );
     }
   } catch (error) {
