@@ -17,24 +17,24 @@ const client = new Client({
   ],
 });
 
-client.once(Events.ClientReady, (readyClient) => {
+client.once(Events.ClientReady, readyClient => {
   logger.info(`✅ Logged in as ${readyClient.user.tag}`);
   // Start webhook server for verification callbacks
   startWebhookServer(client);
 });
 
 // Handle new member joins
-client.on(Events.GuildMemberAdd, async (member) => {
+client.on(Events.GuildMemberAdd, async member => {
   await handleMemberJoin(member);
 });
 
 // Handle direct messages for email collection
-client.on(Events.MessageCreate, async (message) => {
+client.on(Events.MessageCreate, async message => {
   await handleDirectMessage(message, client);
 });
 
 // Handle all interactions via router
-client.on(Events.InteractionCreate, async (interaction) => {
+client.on(Events.InteractionCreate, async interaction => {
   await handleInteraction(interaction);
 });
 

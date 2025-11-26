@@ -21,11 +21,11 @@ import { handleJoinMatch, handleScheduleMatch } from "./buttons.js";
 
 // Types
 type ChatInputCommandHandler = (
-  interaction: ChatInputCommandInteraction,
+  interaction: ChatInputCommandInteraction
 ) => Promise<void>;
 
 type ModalSubmitHandler = (
-  interaction: ModalSubmitInteraction,
+  interaction: ModalSubmitInteraction
 ) => Promise<void>;
 
 // Registries
@@ -134,7 +134,7 @@ async function handleSelectMenu(interaction: StringSelectMenuInteraction) {
             discordUserId,
             ranking,
           }),
-        },
+        }
       );
 
       if (!response.ok) {
@@ -143,7 +143,7 @@ async function handleSelectMenu(interaction: StringSelectMenuInteraction) {
       }
 
       await interaction.editReply({
-        content: `Successfully updated your tennis ranking to **${interaction.component.options.find((o) => o.value === ranking)?.label}**!`,
+        content: `Successfully updated your tennis ranking to **${interaction.component.options.find(o => o.value === ranking)?.label}**!`,
       });
     } catch (error) {
       logger.error(error, "Error updating ranking");

@@ -3,7 +3,7 @@ import { logger } from "@tmac/shared/logger";
 
 export async function handleJoinMatch(
   interaction: ButtonInteraction,
-  _matchId: string,
+  _matchId: string
 ) {
   try {
     // 1. Get the message that triggered this
@@ -22,8 +22,8 @@ export async function handleJoinMatch(
       // Parse basic info from message content to name the thread
       // Content format: "🗓️ Date\n⏰ Time\n📍 Court..."
       const lines = message.content.split("\n");
-      const dateLine = lines.find((l) => l.includes("🗓️")) || "Date";
-      const courtLine = lines.find((l) => l.includes("📍")) || "Court";
+      const dateLine = lines.find(l => l.includes("🗓️")) || "Date";
+      const courtLine = lines.find(l => l.includes("📍")) || "Court";
       const date = dateLine.replace("🗓️", "").trim();
       const court = courtLine.replace("📍", "").trim();
 
@@ -60,7 +60,7 @@ export async function handleJoinMatch(
 export async function handleScheduleMatch(
   interaction: ButtonInteraction,
   creatorId: string,
-  _matchId: string,
+  _matchId: string
 ) {
   try {
     // 1. Check permission
