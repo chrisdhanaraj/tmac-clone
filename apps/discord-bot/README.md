@@ -109,12 +109,7 @@ pnpm dev
 
 1. **Verification**:
    - In your test Discord server, use the command `/match`.
-   - The bot should DM you.
-   - Reply with your email address (must exist in your local database).
-   - The bot will send a verification email (via Loops).
-   - Click the link in the email (it will point to your local Front Office).
-   - Front Office processes the request and calls the Bot's webhook (`localhost:3001`).
-   - The Bot assigns the role in Discord and DMs you a success message.
+   - The bot should open a modal with a title **Request a Match**.
 
 ## Deployment
 
