@@ -6,7 +6,12 @@ This service powers the Discord integration for TMAC, handling member verificati
 
 To work on the bot locally without interfering with production, you need to set up a separate "Dev" Discord Application.
 
-### 1. Create a Dev Application
+### 1. Create a Test Discord Server
+
+1. [Go to the [Discord Developer Portal](https://discord.com/developers/applications).](https://support.discord.com/hc/en-us/articles/204849977-How-do-I-create-a-server).
+2. Click **Create My Own** and name it something like `TMAC Bot Test Server`.
+
+### 2. Create a Dev Application
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications).
 2. Click **New Application** and name it something like `TMAC Bot (Dev)`.
@@ -28,7 +33,7 @@ To work on the bot locally without interfering with production, you need to set 
      - Attach Files
    - Copy the generated URL and open it in your browser to invite the bot to your test server.
 
-### 2. Environment Configuration
+### 3. Environment Configuration
 
 Create a `.env` file in `apps/discord-bot/` based on the required variables:
 
@@ -70,7 +75,7 @@ DISCORD_WEBHOOK_URL="http://localhost:3001"
 DISCORD_WEBHOOK_SECRET="dev-secret-123"
 ```
 
-### 3. Running Locally
+### 4. Running Locally
 
 1. **Install dependencies**:
 
@@ -103,7 +108,7 @@ pnpm dev
 ### 4. Testing the Flow
 
 1. **Verification**:
-   - In your test Discord server, use the command `/verify`.
+   - In your test Discord server, use the command `/match`.
    - The bot should DM you.
    - Reply with your email address (must exist in your local database).
    - The bot will send a verification email (via Loops).
