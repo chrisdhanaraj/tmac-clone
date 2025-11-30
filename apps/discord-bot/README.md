@@ -77,26 +77,27 @@ DISCORD_WEBHOOK_SECRET="dev-secret-123"
    ```bash
    pnpm install
    ```
+   
+2. **Start Front Office**:
+   In a separate terminal tab:
+   ```bash
+   cd apps/front-office
+   pnpm dev
+   ```
+   
+3. **Start the Bot**:
 
-2. **Register Slash Commands**:
-   This registers the commands (like `/verify`) with your dev guild.
+```bash
+cd apps/discord-bot
+pnpm dev
+```
+   
+4. **Register Slash Commands**:
+   In a separate terminal tab, make sure you're in `apps/discord-bot` and register the commands (like `/verify`) with your dev guild.
 
    ```bash
    cd apps/discord-bot
    pnpm register:commands
-   ```
-
-3. **Start the Bot**:
-
-   ```bash
-   pnpm dev
-   ```
-
-4. **Start Front Office**:
-   In a separate terminal:
-   ```bash
-   cd apps/front-office
-   pnpm dev
    ```
 
 ### 4. Testing the Flow
